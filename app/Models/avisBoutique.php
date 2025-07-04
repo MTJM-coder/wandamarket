@@ -11,7 +11,13 @@ class AvisBoutique extends Model
         'note',
         'commentaire',
         'boutique_id',
-        'user_id',
+        'acheteur_id',
+        'visible',
+        'slug',
+    ];
+
+    protected $casts = [
+        'note'=>'int',
     ];
 
     public function boutique()

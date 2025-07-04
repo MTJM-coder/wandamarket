@@ -10,7 +10,6 @@ class Categorie extends Model
     protected $fillable = [
         'nom',
         'description',
-        'slug',
     ];
 
     public function produits()

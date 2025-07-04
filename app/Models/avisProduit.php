@@ -10,8 +10,14 @@ class AvisProduit extends Model
     protected $fillable = [
         'note',
         'commentaire',
+        'visible',
         'produit_id',
-        'user_id',
+        'acheteur_id',
+        'slug',
+    ];
+
+    protected $casts = [
+        'note'=>'int',
     ];
     public function produit()
     {

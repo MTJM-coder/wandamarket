@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\UserRules;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -23,9 +24,20 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
-        'password',
+        'telephone',
+        'mot_de_passe',
+        'role',
+        'ville',
+        'quartier',
+        'image',
+        'slug',
+    ];
+
+    protected $casts= [
+        'role'=>UserRules::class,
     ];
 
     /**
@@ -34,8 +46,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'mot_de_passe',
+        // 'remember_token',
     ];
 
     /**
@@ -46,17 +58,22 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            // 'email_verified_at' => 'datetime',
+            'mot_de_passe' => 'hashed',
         ];
     }
 
-    public function boutiques(){
-        $this->belongsTo(Boutique::class);
-    }
 
     public function commandes(){
         $this->hasMany(Commande::class);
+    }
+
+    public function conversationUser1(){
+        return $this->hasMany(Conversation::class);
+    }
+
+    public function conversationUser2(){
+        return $this->hasMany(Conversation::class);
     }
 
     public function avisBoutique(){
@@ -72,5 +89,8 @@ class User extends Authenticatable
     }
     public function messageReceive(){
         $this->hasMany(Message::class);
+    }
+    public function boutique(){
+        $this->hasMany(Boutique::class);
     }
 }

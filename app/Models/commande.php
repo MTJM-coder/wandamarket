@@ -8,17 +8,18 @@ class Commande extends Model
 {
     //
     protected $fillable = [
-        'user_id',
+        'acheteur_id',
         'montant_total',
-        'statut',
-        'date_commande',
+        'boutique_id',
+        'etat',
         'mode_paiement',
-        'numero_livraison'
+        'numero_livraison',
+        'date_livraison',
     ];
 
-    public function produits(){
-        $this->hasMany(Produit::class);
-    }
+    // public function produits(){
+    //     $this->hasMany(Produit::class);
+    // }
 
     public function users(){
         $this->belongsTo(User::class);
