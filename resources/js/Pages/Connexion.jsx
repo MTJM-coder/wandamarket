@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react'; // Utilisez le Link d'Inertia
 import { FiMail, FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
+import { router } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
+
+
+
 
 const LoginForm = () => {
+  const { props } = usePage();
+const status = props.status;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -23,9 +31,13 @@ const LoginForm = () => {
     e.preventDefault();
     if (validateForm()) {
       setIsLoading(true);
-      // Utilisez Inertia.post pour la soumission du formulaire
-      // post('/login', { email, password })
-      //   .finally(() => setIsLoading(false));
+      router.post('/login', { email, password }, {
+        onError: (errors) => {
+          setErrors(errors);
+          setIsLoading(false);
+        },
+        onFinish: () => setIsLoading(false),
+      });
     }
   };
   return (
@@ -53,10 +65,15 @@ const LoginForm = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {status && (
+      <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-md shadow-sm text-sm">
+        {status}
+      </div>
+    )}
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Adresse email
+                Adresse email ou téléphone
               </label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

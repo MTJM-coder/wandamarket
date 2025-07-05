@@ -31,21 +31,40 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'nom' => 'required|string|max:255',
+            'prenom' => 'string|max:255|nullable',
+            'email' => 'string|email|max:255|unique:'.User::class,
+            'telephone' => 'string|max:255|unique:'.User::class,
+             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable',
+             'ville' => 'string|max:255|nullable',
+            'quartier' => 'string|max:255|nullable',
+           
+            'password' => ['required','min:8', 'confirmed'],
+            
+           
         ]);
+      
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
+        $user = new User();
+        $user->nom = $request->nom;
+        $user->prenom=$request->prenom;
+        $user->email = strtolower($request->email);
+        $user->telephone = $request->telephone;
+        $user->ville = $request->ville ? $request->ville : null;
+        $user->quartier = $request->quartier ? $request->quartier : null;
+        $user->password = Hash::make($request->password);
+        $user->image = $request->file('image') ? $request->file('image')->store('images', 'public') : null;
+        $user->save();
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return 
+        redirect(route('dashboard', absolute: false));
+
     }
+    
+    
+
 }

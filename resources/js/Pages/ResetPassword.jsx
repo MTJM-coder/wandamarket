@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FiMail, FiPhone, FiLock, FiClock, FiArrowRight, FiCheck } from 'react-icons/fi';
+import { usePage } from '@inertiajs/react';
 
 const PasswordResetForm = () => {
   const [step, setStep] = useState(1);
   const [countdown, setCountdown] = useState(300); // 5 minutes en secondes
   const { data, setData, post, processing, errors } = useForm({
-    email_or_phone: '',
+    email: '',
     otp_code: '',
     password: '',
-    password_confirmation: ''
+   
   });
 
   // Formatage du compte à rebours
@@ -19,7 +20,7 @@ const PasswordResetForm = () => {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // Gestion du compte à rebours
+  // Gestion du PrimaryButtoncompte à rebours
   useEffect(() => {
     let timer;
     if (step === 2 && countdown > 0) {
@@ -92,6 +93,11 @@ const PasswordResetForm = () => {
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             {/* Étape 1: Email/Téléphone */}
+              {status && (
+      <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-md shadow-sm text-sm">
+        {status}
+      </div>
+    )}
             {step === 1 && (
               <form onSubmit={handleSubmitStep1}>
                 <div className="space-y-6">
@@ -101,7 +107,7 @@ const PasswordResetForm = () => {
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        {data.email_or_phone.includes('@') ? (
+                        {data.email.includes('@') ? (
                           <FiMail className="h-5 w-5 text-gray-400" />
                         ) : (
                           <FiPhone className="h-5 w-5 text-gray-400" />
@@ -109,15 +115,15 @@ const PasswordResetForm = () => {
                       </div>
                       <input
                         id="email_or_phone"
-                        name="email_or_phone"
+                        name="email"
                         type="text"
-                        value={data.email_or_phone}
+                        value={data.email}
                         onChange={handleChange}
-                        className={`block w-full pl-10 pr-3 py-2 border ${errors.email_or_phone ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-[#ec8d0c] focus:border-[#ec8d0c]`}
+                        className={`block w-full pl-10 pr-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-[#ec8d0c] focus:border-[#ec8d0c]`}
                         required
                       />
                     </div>
-                    {errors.email_or_phone && <p className="mt-2 text-sm text-red-600">{errors.email_or_phone}</p>}
+                    {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
                   </div>
 
                   <div>
@@ -139,7 +145,7 @@ const PasswordResetForm = () => {
                 <div className="space-y-6">
                   <div className="text-center">
                     <p className="text-sm text-gray-600">
-                      Un code de vérification a été envoyé à <span className="font-medium">{data.email_or_phone}</span>
+                      Un code de vérification a été envoyé à <span className="font-medium">{data.email}</span>
                     </p>
                   </div>
 
@@ -207,6 +213,13 @@ const PasswordResetForm = () => {
             {step === 3 && (
               <form onSubmit={handleSubmitStep3}>
                 <div className="space-y-6">
+                  {/* message du status pour informer que le code est verifier */}
+                  {errors.status && (
+                    <div className="text-sm text-green-600 mb-4">
+                      <FiCheck className="inline mr-2" />
+                      {errors.status}
+                    </div>
+                  )}
                   <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                       Nouveau mot de passe

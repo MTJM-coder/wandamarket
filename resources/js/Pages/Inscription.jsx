@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FiUser, FiMail, FiPhone, FiLock, FiCamera, FiArrowRight, FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { usePage } from '@inertiajs/react';
 
 const RegisterForm = () => {
   const [step, setStep] = useState(1);
   const [imagePreview, setImagePreview] = useState(null);
   const { data, setData, post, processing, errors } = useForm({
-    nom: '',
-    prenom: '',
-    email: '',
-    telephone: '',
-    ville: '',
-    quartier: '',
-    image: null,
-    mot_de_passe: '',
-    mot_de_passe_confirmation: ''
-  });
+  nom: '',
+  prenom: '',
+  email: '',
+  telephone: '',
+  ville: '',
+  quartier: '',
+  image: null,
+ password: '',
+  password_confirmation: ''
+});
 
+console.log(errors)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData(name, value);
@@ -44,7 +46,18 @@ const RegisterForm = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    post('/register');
+     post('/register', {
+    forceFormData: true,
+    onError: (errors) => {
+      if (errors.nom || errors.prenom || errors.email || errors.telephone) {
+        setStep(1);
+      } else if (errors.image) {
+        setStep(2);
+      } else if (errors.password || errors.password_confirmation || errors.ville || errors.quartier) {
+        setStep(3);
+      }
+    },
+  });
   };
 
   return (
@@ -90,6 +103,11 @@ const RegisterForm = () => {
 
         <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+              {status && (
+      <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-md shadow-sm text-sm">
+        {status}
+      </div>
+    )}
             <form onSubmit={submitForm}>
               {/* Étape 1: Informations de base */}
               {step === 1 && (
@@ -289,7 +307,7 @@ const RegisterForm = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="mot_de_passe" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                       Mot de passe
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
@@ -298,19 +316,19 @@ const RegisterForm = () => {
                       </div>
                       <input
                         id="mot_de_passe"
-                        name="mot_de_passe"
+                        name="password"
                         type="password"
-                        value={data.mot_de_passe}
+                        value={data.password}
                         onChange={handleChange}
-                        className={`block w-full pl-10 pr-3 py-2 border ${errors.mot_de_passe ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-[#ec8d0c] focus:border-[#ec8d0c]`}
+                        className={`block w-full pl-10 pr-3 py-2 border ${errors.password? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-[#ec8d0c] focus:border-[#ec8d0c]`}
                         required
                       />
                     </div>
-                    {errors.mot_de_passe && <p className="mt-2 text-sm text-red-600">{errors.mot_de_passe}</p>}
+                    {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
                   </div>
 
                   <div>
-                    <label htmlFor="mot_de_passe_confirmation" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700">
                       Confirmer le mot de passe
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
@@ -319,15 +337,15 @@ const RegisterForm = () => {
                       </div>
                       <input
                         id="mot_de_passe_confirmation"
-                        name="mot_de_passe_confirmation"
+                        name="password_confirmation"
                         type="password"
-                        value={data.mot_de_passe_confirmation}
+                        value={data.password_confirmation}
                         onChange={handleChange}
-                        className={`block w-full pl-10 pr-3 py-2 border ${errors.mot_de_passe_confirmation ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-[#ec8d0c] focus:border-[#ec8d0c]`}
+                        className={`block w-full pl-10 pr-3 py-2 border ${errors.password_confirmation ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-[#ec8d0c] focus:border-[#ec8d0c]`}
                         required
                       />
                     </div>
-                    {errors.mot_de_passe_confirmation && <p className="mt-2 text-sm text-red-600">{errors.mot_de_passe_confirmation}</p>}
+                    {errors.password_confirmation && <p className="mt-2 text-sm text-red-600">{errors.password_confirmation}</p>}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
