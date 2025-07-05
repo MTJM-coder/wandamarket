@@ -45,6 +45,16 @@ Route::get('/reset', function () {
   
     ]);
 })->name('connexion');
+Route::get('/produit', function () {
+    return Inertia::render('ProductsPage', [
+  
+    ]);
+})->name('connexion');
+Route::get('/layout', function () {
+    return Inertia::render('AuthenticatedLayout', [
+  
+    ]);
+})->name('connexion');
 
 Route::post('/password/reset/step1',[loginController::class, 'resetStep1']);
 Route::post('/password/reset/step2',[loginController::class, 'resetStep2']);
