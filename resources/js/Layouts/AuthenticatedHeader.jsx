@@ -4,13 +4,13 @@ import { FiSearch, FiShoppingCart, FiBell } from 'react-icons/fi';
 import { FaStore } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const AuthenticatedHeader = ({ user = {} }) => {
+const AuthenticatedHeader = ({ user = {}, vendeur = false }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
     <header className="fixed w-full z-50 bg-white shadow-md py-3">
       <div className="container mx-auto px-4">
-        <div className=" flex justify-between items-center">
+        <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/dashboard" className="ml-20 flex items-center space-x-2">
             <div className="font-bold text-2xl text-[#071726]">WANDA</div>
@@ -31,13 +31,24 @@ const AuthenticatedHeader = ({ user = {} }) => {
 
           {/* Actions utilisateur */}
           <div className="flex items-center space-x-4">
-            <Link 
-              href="/seller/dashboard" 
-              className="hidden md:flex items-center px-3 py-2 bg-[#071726] text-white rounded-md hover:bg-[#0d2a40] transition"
-            >
-              <FaStore className="mr-2" />
-              <span>Vendre</span>
-            </Link>
+            {/* Bouton conditionnel Vendre/Créer ma boutique */}
+            {vendeur ? (
+              <Link 
+                href="/seller/dashboard" 
+                className="hidden md:flex items-center px-3 py-2 bg-[#071726] text-white rounded-md hover:bg-[#0d2a40] transition"
+              >
+                <FaStore className="mr-2" />
+                <span>Vendre</span>
+              </Link>
+            ) : (
+              <Link 
+                href="/seller-register" 
+                className="hidden md:flex items-center px-3 py-2 bg-[#071726] text-white rounded-md hover:bg-[#0d2a40] transition"
+              >
+                <FaStore className="mr-2" />
+                <span>Créer ma boutique</span>
+              </Link>
+            )}
 
             <Link href="/cart" className="p-2 relative">
               <FiShoppingCart className="text-[#071726] h-6 w-6" />

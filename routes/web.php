@@ -55,6 +55,11 @@ Route::get('/layout', function () {
   
     ]);
 })->name('connexion');
+Route::get('/seller-register', function () {
+    return Inertia::render('SellerRegister', [
+  
+    ]);
+})->name('connexion');
 
 Route::post('/password/reset/step1',[loginController::class, 'resetStep1']);
 Route::post('/password/reset/step2',[loginController::class, 'resetStep2']);
