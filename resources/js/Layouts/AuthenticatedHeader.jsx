@@ -3,8 +3,12 @@ import { Link } from '@inertiajs/react';
 import { FiSearch, FiShoppingCart, FiBell } from 'react-icons/fi';
 import { FaStore } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePage } from '@inertiajs/react';
 
-const AuthenticatedHeader = ({ user = {}, vendeur = false }) => {
+const AuthenticatedHeader = () => {
+  const { props } = usePage();
+const user = props.auth.user || {};
+const vendeur = props.auth.user.role ==='vendeur' || false;
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
@@ -32,7 +36,7 @@ const AuthenticatedHeader = ({ user = {}, vendeur = false }) => {
           {/* Actions utilisateur */}
           <div className="flex items-center space-x-4">
             {/* Bouton conditionnel Vendre/Créer ma boutique */}
-            {vendeur ? (
+            {vendeur?(
               <Link 
                 href="/seller/dashboard" 
                 className="hidden md:flex items-center px-3 py-2 bg-[#071726] text-white rounded-md hover:bg-[#0d2a40] transition"
@@ -68,7 +72,7 @@ const AuthenticatedHeader = ({ user = {}, vendeur = false }) => {
                 className="flex items-center space-x-1 focus:outline-none"
               >
                 <div className="w-8 h-8 rounded-full bg-[#071726] flex items-center justify-center text-white">
-                  {user?.name?.charAt(0) || 'U'}
+                  {user?.nom?.charAt(0) || 'U'}
                 </div>
               </button>
 

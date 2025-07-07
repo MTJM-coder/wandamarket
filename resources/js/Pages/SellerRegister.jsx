@@ -63,6 +63,7 @@ const SellerRegister = () => {
                 <input
                   id="nom"
                   type="text"
+                  name='nom'
                   value={data.nom}
                   onChange={(e) => setData('nom', e.target.value)}
                   className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent ${
@@ -90,12 +91,13 @@ const SellerRegister = () => {
                   <input
                     id="ville"
                     type="text"
+                    name='ville'
                     value={data.ville}
                     onChange={(e) => setData('ville', e.target.value)}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent ${
                       errors.ville ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="Ex: Abidjan"
+                    placeholder="Ex: Douala"
                     required
                   />
                   {errors.ville && (
@@ -115,12 +117,14 @@ const SellerRegister = () => {
                   <input
                     id="quartier"
                     type="text"
+
+                    name='quartier'
                     value={data.quartier}
                     onChange={(e) => setData('quartier', e.target.value)}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent ${
                       errors.quartier ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="Ex: Cocody"
+                    placeholder="Ex: Akwa"
                     required
                   />
                   {errors.quartier && (
@@ -141,6 +145,7 @@ const SellerRegister = () => {
                 </div>
                 <textarea
                   id="description"
+                  name='description'
                   value={data.description}
                   onChange={(e) => setData('description', e.target.value)}
                   rows={4}
@@ -169,12 +174,13 @@ const SellerRegister = () => {
                   <input
                     id="telephone"
                     type="tel"
+                    name='telephone'
                     value={data.telephone}
                     onChange={(e) => setData('telephone', e.target.value)}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent ${
                       errors.telephone ? 'border-red-500' : 'border-gray-300'
                     }`}
-                    placeholder="Ex: +225 07 00 00 00 00"
+                    placeholder="Ex: +237 650 00 00 00 00"
                     required
                   />
                   {errors.telephone && (
@@ -194,6 +200,7 @@ const SellerRegister = () => {
                   <input
                     id="email"
                     type="email"
+                    name='email'
                     value={data.email}
                     onChange={(e) => setData('email', e.target.value)}
                     className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent ${

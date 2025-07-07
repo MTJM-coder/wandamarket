@@ -7,10 +7,16 @@ import {
 } from 'react-icons/fi';
 import { FaStore } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { usePage } from '@inertiajs/react';
 
-const Sidebar = ({ user = {}, vendeur = false }) => {
+
+const Sidebar = () => {
+  const { props } = usePage();
+  const user = props.auth.user || {};
+  const vendeur = user.role === 'vendeur';
+
   const [expandedMenus, setExpandedMenus] = useState({
-    seller: false,
+    seller: false, 
     account: false
   });
 
@@ -26,11 +32,11 @@ const Sidebar = ({ user = {}, vendeur = false }) => {
       {/* Profil utilisateur */}
       <div className="mt-20 flex items-center p-6 border-b border-[#0d2a40]">
         <div className="w-12 h-12 rounded-full bg-[#ec8d0c] flex items-center justify-center text-white text-xl font-bold">
-          {user?.name?.charAt(0) || 'U'}
+          {user?.nom?.charAt(0) || 'U'}
         </div>
         <div className="ml-4">
-          <p className="font-medium">{user?.name || 'Utilisateur'}</p>
-          <p className="text-xs text-gray-300">{user?.email || ''}</p>
+          <p className="font-medium">{user?.nom || 'Utilisateur'}</p>
+          <p className="text-xs text-gray-300">{user?.email || user?.telephone|| ''}</p>
         </div>
       </div>
 
