@@ -32,11 +32,15 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()
+                    ? $request->user()->only('id', 'nom', 'email', 'telephone', 'role')
+                    : null,
+                // 'isVendeur' => $request->user()?->role === 'vendeur',
             ],
-            'status' => fn () => $request->session()->get('status'),
 
-            
+            'status' => fn() => $request->session()->get('status'),
+
+
         ];
     }
 }
