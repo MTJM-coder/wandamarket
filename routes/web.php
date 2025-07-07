@@ -61,6 +61,24 @@ Route::get('/seller-register', function () {
     ]);
 })->name('connexion');
 
+Route::get('/boutique', function () {
+    return Inertia::render('MaBoutique', [
+  
+    ]);
+})->name('connexion');
+
+Route::get('/parametre', function () {
+    return Inertia::render('Parametre', [
+  
+    ]);
+})->name('connexion');
+
+Route::get('/dashboard-achat', function () {
+    return Inertia::render('DashboardAchat', [
+  
+    ]);
+})->name('connexion');
+
 Route::post('/password/reset/step1',[loginController::class, 'resetStep1']);
 Route::post('/password/reset/step2',[loginController::class, 'resetStep2']);
 Route::post('/password/reset/step3',[loginController::class, 'resetStep3']);

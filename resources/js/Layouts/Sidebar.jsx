@@ -39,7 +39,7 @@ const Sidebar = ({ user = {}, vendeur = false }) => {
         <ul className="space-y-2">
           <li>
             <Link 
-              href="/dashboard" 
+              href="/dashboard-achat" 
               className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
             >
               <FiHome className="mr-3" />
@@ -49,7 +49,7 @@ const Sidebar = ({ user = {}, vendeur = false }) => {
 
           <li>
             <Link 
-              href="/products" 
+              href="/produit" 
               className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
             >
               <FiShoppingBag className="mr-3" />
@@ -112,7 +112,7 @@ const Sidebar = ({ user = {}, vendeur = false }) => {
           )}
 
           {/* Menu compte */}
-          <li>
+          {/* <li>
             <button 
               onClick={() => toggleMenu('account')}
               className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-[#0d2a40] transition"
@@ -151,6 +151,15 @@ const Sidebar = ({ user = {}, vendeur = false }) => {
                 </li>
               </ul>
             </motion.div>
+          </li> */}
+           <li>
+            <Link 
+              href="/parametre" 
+              className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
+            >
+              <FiUser className="mr-3" />
+              <span>Mon compte </span>
+            </Link>
           </li>
         </ul>
       </nav>
