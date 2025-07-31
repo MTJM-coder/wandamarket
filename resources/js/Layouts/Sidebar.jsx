@@ -65,7 +65,7 @@ const Sidebar = () => {
 
           <li>
             <Link 
-              href="/wishlist" 
+              href="/favoirs" 
               className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
             >
               <FiHeart className="mr-3" />

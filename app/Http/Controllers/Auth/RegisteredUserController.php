@@ -61,7 +61,10 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return 
-        redirect(route('produit', absolute: false));
+          
+
+        redirect(route('ProductsPage', absolute: false));
+
 
     }
     

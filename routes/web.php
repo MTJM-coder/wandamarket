@@ -75,3 +75,28 @@ Route::post('/password/reset/resend-otp', [loginController::class, 'resetStep1']
 Route::post('/produit/save',[produitController::class,'store']);
 Route::delete('/produit/{id}', [produitController::class, 'remove'])->name('produit.remove');
 Route::post('/produit/update/{id}', [produitController::class, 'update'])->name('produit.update');
+
+Route::get('/boutique', function () {
+    return Inertia::render('MaBoutique', [
+  
+    ]);
+})->name('connexion');
+
+Route::get('/parametre', function () {
+    return Inertia::render('Parametre', [
+  
+    ]);
+})->name('connexion');
+
+Route::get('/dashboard-achat', function () {
+    return Inertia::render('DashboardAchat', [
+  
+    ]);
+})->name('connexion');
+
+Route::get('/favoirs', function () {
+    return Inertia::render('Favoris', [
+  
+    ]);
+})->name('connexion');
+
