@@ -10,9 +10,12 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BoutiqueController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\produitController;
+use App\Http\Controllers\UserParamController;
 use App\Models\visite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use App\Http\Controllers\dashboardController;
 
 
 Route::get('/', function () {
@@ -55,23 +58,12 @@ Route::get('/seller-register', function () {
     }
 })->name('connexion');
 
-Route::get('/boutique', function () {
-    return Inertia::render('MaBoutique', [
-  
-    ]);
-})->name('connexion');
+Route::get('/boutique', [BoutiqueController::class,'boutique'])->name('connexion');
 
-Route::get('/parametre', function () {
-    return Inertia::render('Parametre', [
-  
-    ]);
-})->name('connexion');
+Route::get('/parametre', [UserParamController::class,'parametre']);
+Route::put('/parametre/update', [UserParamController::class,'update']);
 
-Route::get('/dashboard-achat', function () {
-    return Inertia::render('DashboardAchat', [
-  
-    ]);
-})->name('connexion');
+Route::get('/dashboard-achat', [dashboardController::class, 'getDashboard'])->name('connexion');
 
 Route::post('/seller-register',[BoutiqueController::class, 'store']);
 
@@ -79,3 +71,7 @@ Route::post('/password/reset/step1', [loginController::class, 'resetStep1']);
 Route::post('/password/reset/step2', [loginController::class, 'resetStep2']);
 Route::post('/password/reset/step3', [loginController::class, 'resetStep3']);
 Route::post('/password/reset/resend-otp', [loginController::class, 'resetStep1']);
+
+Route::post('/produit/save',[produitController::class,'store']);
+Route::delete('/produit/{id}', [produitController::class, 'remove'])->name('produit.remove');
+Route::post('/produit/update/{id}', [produitController::class, 'update'])->name('produit.update');

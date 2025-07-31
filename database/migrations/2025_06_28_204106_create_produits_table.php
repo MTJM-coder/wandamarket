@@ -26,7 +26,7 @@ return new class extends Migration
             $table->decimal('prix_reduit', 10, 2)->nullable();
             $table->bigInteger('categorie_id')->unsigned()->nullable();
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('set null');
-            $table->string('slug',191)->unique();
+            $table->string('slug',191)->unique()->nullable();
 
         });
     }

@@ -1,12 +1,10 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Commande extends Model
 {
-    //
     protected $fillable = [
         'acheteur_id',
         'montant_total',
@@ -17,13 +15,22 @@ class Commande extends Model
         'date_livraison',
     ];
 
-    // public function produits(){
-    //     $this->hasMany(Produit::class);
-    // }
-
-    public function users(){
-        $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'acheteur_id');
     }
 
-    
+    public function commandeProduits()
+{
+    return $this->hasMany(CommandeProduit::class);
+}
+    public function boutique()
+    {
+        return $this->belongsTo(Boutique::class);
+    }
+
+    public function produits()
+    {
+        return $this->belongsToMany(Produit::class, 'commande_produits')->withPivot('quantite');
+    }
 }

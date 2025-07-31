@@ -6,8 +6,20 @@ import {
 } from 'react-icons/fi';
 import { FaChartLine, FaWallet } from 'react-icons/fa';
 import AuthenticatedLayout from './AuthenticatedLayout';
+import {usePage} from '@inertiajs/react';
+
+
 
 const DashboardAchat = () => {
+  const {props}=usePage();
+const commandeTotale= props.commandeTotal;
+const commandeEncour=props.commandeEncour;
+const commadeAnnule=props.commadeAnnule;
+const commandeLivre=props.commandeLivre;
+const mtDepense=props.mtDepense;
+const favoris =props.favoris;
+const avis = props.avis;
+const commandeRecente=props.commandeRecente;
   // Données fictives
   const stats = {
     commandes: {
@@ -21,7 +33,7 @@ const DashboardAchat = () => {
       moisEnCours: 85000,
       moisPrecedent: 160000
     },
-    favoris: 7,
+   
     avisDonnes: 5,
     adresses: 2,
     paiements: [
@@ -109,7 +121,7 @@ const DashboardAchat = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Commandes totales</p>
-                <p className="text-2xl font-bold text-[#071726]">{stats.commandes.total}</p>
+                <p className="text-2xl font-bold text-[#071726]">{commandeTotale}</p>
               </div>
               <div className="p-3 rounded-full bg-[#071726] text-white">
                 <FiShoppingBag className="w-6 h-6" />
@@ -117,10 +129,10 @@ const DashboardAchat = () => {
             </div>
             <div className="mt-4 flex space-x-4">
               <span className="text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
-                {stats.commandes.livrees} livrées
+                {commandeLivre} livrées
               </span>
               <span className="text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                {stats.commandes.enCours} en cours
+                {commandeEncour} en cours
               </span>
             </div>
           </div>
@@ -131,7 +143,7 @@ const DashboardAchat = () => {
               <div>
                 <p className="text-sm font-medium text-gray-500">Dépenses totales</p>
                 <p className="text-2xl font-bold text-[#071726]">
-                  {stats.depenses.total.toLocaleString()} FCFA
+                  {mtDepense.toLocaleString()} FCFA
                 </p>
               </div>
               <div className="p-3 rounded-full bg-[#ec8d0c] text-white">
@@ -150,7 +162,7 @@ const DashboardAchat = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Produits favoris</p>
-                <p className="text-2xl font-bold text-[#071726]">{stats.favoris}</p>
+                <p className="text-2xl font-bold text-[#071726]">{favoris}</p>
               </div>
               <div className="p-3 rounded-full bg-purple-100 text-purple-600">
                 <FiHeart className="w-6 h-6" />
@@ -168,7 +180,7 @@ const DashboardAchat = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Avis donnés</p>
-                <p className="text-2xl font-bold text-[#071726]">{stats.avisDonnes}</p>
+                <p className="text-2xl font-bold text-[#071726]">{avis}</p>
               </div>
               <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
                 <FiStar className="w-6 h-6" />
@@ -197,21 +209,22 @@ const DashboardAchat = () => {
             </div>
 
             <div className="space-y-4">
-              {commandesRecentes.map(commande => (
+            
+              {commandeRecente.map(commande => (
                 <div key={commande.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-medium text-[#071726]">Commande #{commande.numero}</h3>
-                      <p className="text-sm text-gray-600">{commande.boutique} • {commande.date}</p>
+                      <h3 className="font-medium text-[#071726]">Commande #CMD-{String(commande.id).padStart(4, '0')}</h3>
+                      <p className="text-sm text-gray-600">{commande.boutique.nom} • {new Date(commande.created_at).toLocaleDateString()}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold">{commande.montant.toLocaleString()} FCFA</p>
+                      <p className="font-bold">{commande.montant_total.toLocaleString()} FCFA</p>
                       <span className={`text-xs px-2 py-1 rounded-full ${
-                        commande.statut === 'Livrée' ? 'bg-green-100 text-green-800' :
-                        commande.statut === 'En cours' ? 'bg-blue-100 text-blue-800' :
+                        commande.etat === 'Livrée' ? 'bg-green-100 text-green-800' :
+                        commande.etat === 'En attente' ? 'bg-blue-100 text-blue-800' :
                         'bg-gray-100 text-gray-800'
                       }`}>
-                        {commande.statut}
+                        {commande.etat}
                       </span>
                     </div>
                   </div>
@@ -219,12 +232,14 @@ const DashboardAchat = () => {
                   <div className="mt-3 border-t border-gray-100 pt-3">
                     <h4 className="text-sm font-medium text-gray-700 mb-2">Produits :</h4>
                     <ul className="space-y-1">
-                      {commande.produits.map((produit, index) => (
-                        <li key={index} className="flex justify-between text-sm">
-                          <span>{produit.nom} × {produit.quantite}</span>
-                          <span>{produit.prix.toLocaleString()} FCFA</span>
-                        </li>
-                      ))}
+                     {commande.commandeProduits?.map((items, index) => (
+  items.produit && (
+    <li key={index} className="flex justify-between text-sm">
+      <span>{items.produit.nom} × {items.quantite}</span>
+      <span>{items.produit.prix.toLocaleString()} FCFA</span>
+    </li>
+  )
+))}
                     </ul>
                   </div>
 

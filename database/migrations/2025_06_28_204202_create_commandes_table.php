@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreign('boutique_id')->references('id')->on('boutiques')->onDelete('cascade');
             $table->decimal('montant_total', 10, 2);
             $table->date('date_commande');
-            $table->string('etat')->default('en attente'); // en attente, en cours, expédiée, livrée, annulée
+            $table->string('etat')->default('en attente'); // en attente,  expédiée, livrée, annulée
             $table->string('mode_paiement')->default('a la livraison'); // en ligne, à la livraison
             $table->string('numero_livraison')->nullable();
             $table->dateTime('date_livraison')->nullable();

@@ -42,4 +42,15 @@ class produit extends Model
     public function categories(){
         return $this->belongsTo(Categorie::class);
     }
+    public function images() {
+    return $this->hasMany(Image::class);
+}
+    public function favoris(){
+        return $this->hasMany(favoris::class);
+    }
+   public function commandes()
+{
+    return $this->belongsToMany(Commande::class, 'commande_produits')
+                ->withPivot('quantite', 'prix_unitaire'); 
+}
 }

@@ -77,20 +77,23 @@ class User extends Authenticatable
     }
 
     public function avisBoutique(){
-        $this->hasMany(AvisBoutique::class);
+       return  $this->hasMany(AvisBoutique::class);
     }
 
     public function avisProduit(){
-        $this->hasMany(AvisProduit::class);
+       return  $this->hasMany(AvisProduit::class);
     }
 
     public function messageSend(){
-        $this->hasMany(Message::class);
+       return  $this->hasMany(Message::class);
     }
     public function messageReceive(){
-        $this->hasMany(Message::class);
+       return  $this->hasMany(Message::class);
     }
     public function boutique(){
-        $this->hasMany(Boutique::class);
+        return $this->belongsTo(Boutique::class);
+    }
+    public function favoris(){
+        return $this->hasMany(favoris::class);
     }
 }

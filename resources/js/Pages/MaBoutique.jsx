@@ -1,94 +1,47 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
-import { 
-  FiPlus, FiEdit, FiTrash2, FiPackage, FiBarChart2, 
+import {
+  FiPlus, FiEdit, FiTrash2, FiPackage, FiBarChart2,
   FiSettings, FiUsers, FiDollarSign, FiImage, FiSearch,
   FiEye, FiEyeOff, FiChevronDown, FiChevronUp
 } from 'react-icons/fi';
 import { FaStore } from 'react-icons/fa';
+import { usePage } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
+
+
 
 const MaBoutique = () => {
-  // Données fictives pour la boutique
+
+  const { props } = usePage();
+  const Maboutique = props.boutique
+  const produit = props.produit
+  const commandes=props.commandes
+  const categorie=props.categorie
+  const commandeMois=props.commandeMois
+  const revenuMois=props.revenuMois
+  const pourcentageCom=props.pourcentageCom
+  const pourcentageRev=props.pourcentageRev
+  const produitPopulaires=props.produitPopulaires
+  const succes = props.flash?.succes
+  if (!Maboutique) {
+    return <div>Chargement de la boutique...</div>; // ou null
+  }
   const boutique = {
-    id: 1,
-    nom: "Mode Africaine by Aïcha",
-    ville: "Abidjan",
-    quartier: "Cocody",
-    description: "Spécialisée en vêtements traditionnels africains modernes",
-    telephone: "+225 07 54 32 10 98",
-    email: "contact@modeafricaine.com",
-    logo: "/images/boutiques/mode-africaine.jpg",
-    statut: "active",
-    date_creation: "2022-05-15"
+    id: Maboutique.id,
+    nom: Maboutique.nom,
+    ville: Maboutique.ville,
+    quartier: Maboutique.quartier,
+    description: Maboutique.description,
+    telephone: Maboutique.telephone,
+    email: Maboutique.email,
+    logo: Maboutique.image,
+    statut: Maboutique.etat,
+    date_creation: Maboutique.created_at
   };
 
-  // Données fictives pour les produits
-  const [produits, setProduits] = useState([
-    {
-      id: 1,
-      nom: "Robe Wax Femme",
-      description: "Robe en wax 100% coton, modèle élégant",
-      prix: 25000,
-      categorie: "Vêtements",
-      stock: 15,
-      images: ["/images/produits/robe-wax.jpg"],
-      statut: "actif",
-      reduction: 0,
-      date_ajout: "2023-01-10"
-    },
-    {
-      id: 2,
-      nom: "Chemise Homme en Bazin",
-      description: "Chemise traditionnelle en bazin riche",
-      prix: 18000,
-      categorie: "Vêtements",
-      stock: 8,
-      images: ["/images/produits/chemise-bazin.jpg"],
-      statut: "actif",
-      reduction: 10,
-      prix_reduit: 16200,
-      date_ajout: "2023-02-05"
-    },
-    {
-      id: 3,
-      nom: "Sac à Main Africain",
-      description: "Sac artisanal en cuir et tissus africains",
-      prix: 15000,
-      categorie: "Accessoires",
-      stock: 0,
-      images: ["/images/produits/sac-africain.jpg"],
-      statut: "inactif",
-      reduction: 0,
-      date_ajout: "2023-03-20"
-    }
-  ]);
 
-  // Données fictives pour les commandes
-  const commandes = [
-    {
-      id: 1,
-      numero: "CMD-2023-001",
-      client: "Fatou Diop",
-      date: "2023-04-15",
-      montant: 43000,
-      statut: "livrée",
-      produits: [
-        { id: 1, nom: "Robe Wax Femme", quantite: 1, prix: 25000 },
-        { id: 2, nom: "Chemise Homme en Bazin", quantite: 1, prix: 18000 }
-      ]
-    },
-    {
-      id: 2,
-      numero: "CMD-2023-002",
-      client: "Jean Kouassi",
-      date: "2023-04-18",
-      montant: 18000,
-      statut: "en cours",
-      produits: [
-        { id: 2, nom: "Chemise Homme en Bazin", quantite: 1, prix: 18000 }
-      ]
-    }
-  ];
+  
 
   const [activeTab, setActiveTab] = useState('produits');
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -98,46 +51,55 @@ const MaBoutique = () => {
   // Fonctions de gestion
   const handleDeleteProduct = (id) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-      setProduits(produits.filter(produit => produit.id !== id));
-    }
-  };
+      router.delete(`/produit/${id}`);
 
-  const handleSaveProduct = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const productData = Object.fromEntries(formData.entries());
-    
-    if (selectedProduct) {
-      // Modification
-      setProduits(produits.map(p => 
-        p.id === selectedProduct.id ? { ...p, ...productData } : p
-      ));
-    } else {
-      // Ajout
-      const newProduct = {
-        id: Math.max(...produits.map(p => p.id)) + 1,
-        ...productData,
-        stock: parseInt(productData.stock),
-        prix: parseFloat(productData.prix),
-        statut: "actif",
-        date_ajout: new Date().toISOString().split('T')[0]
-      };
-      setProduits([...produits, newProduct]);
     }
-    
-    setSelectedProduct(null);
-    setActiveTab('produits');
   };
+const handleUpdateBoutique=(e)=>{
+ 
+}
+  const handleSaveProduct = (e) => {
+  e.preventDefault(); 
+
+  const formData = new FormData(e.target);
+
+  if (selectedProduct) {
+    // Cas modification
+    router.post('/produit/update/' + selectedProduct.id, formData, {
+      forceFormData: true,
+      onSuccess: () => {
+        setSelectedProduct(null);
+        setActiveTab('produits');
+      }
+    });
+  } else {
+    // Cas ajout
+    router.post('/produit/save', formData, {
+      forceFormData: true,
+      onSuccess: () => {
+        setSelectedProduct(null);
+        setActiveTab('produits');
+      }
+    });
+  }
+};
+
 
   const toggleOrderDetails = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
   // Filtrage des produits
-  const filteredProducts = produits.filter(produit =>
+  const filteredProducts = produit.filter(produit =>
     produit.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
     produit.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const [previews, setPreviews] = useState([]);
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const previewUrls = files.map(file => URL.createObjectURL(file));
+    setPreviews(previewUrls);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -229,7 +191,7 @@ const MaBoutique = () => {
             {activeTab === 'produits' && (
               <div className="p-6">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                  <h2 className="text-xl font-bold text-[#071726]">Mes produits ({produits.length})</h2>
+                  <h2 className="text-xl font-bold text-[#071726]">Mes produits ({produit.length})</h2>
                   <div className="flex items-center gap-3 w-full md:w-auto">
                     <div className="relative flex-1 md:w-64">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -243,7 +205,7 @@ const MaBoutique = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                       />
                     </div>
-                    <button 
+                    <button
                       onClick={() => { setSelectedProduct(null); setActiveTab('ajouter'); }}
                       className="flex items-center px-4 py-2 bg-[#ec8d0c] text-white rounded-lg hover:bg-[#d97d0c] transition"
                     >
@@ -265,17 +227,22 @@ const MaBoutique = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredProducts.map((produit) => (
+                      {produit.map((produit) => (
                         <tr key={produit.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-md overflow-hidden">
                                 {produit.images && produit.images.length > 0 ? (
-                                  <img className="h-full w-full object-cover" src={produit.images[0]} alt={produit.nom} />
+                                  <img
+                                    className="h-full w-full object-cover"
+                                    src={`/storage/${produit.images[0].url}`} ne
+                                    alt={produit.nom}
+                                  />
                                 ) : (
                                   <FiImage className="h-full w-full text-gray-400 p-2" />
                                 )}
                               </div>
+
                               <div className="ml-4">
                                 <div className="text-sm font-medium text-[#071726]">{produit.nom}</div>
                                 <div className="text-sm text-gray-500">{produit.categorie}</div>
@@ -298,28 +265,26 @@ const MaBoutique = () => {
                             )}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              produit.stock > 5 ? 'bg-green-100 text-green-800' : 
-                              produit.stock > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
-                            }`}>
-                              {produit.stock} en stock
+                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${produit.quantite > 5 ? 'bg-green-100 text-green-800' :
+                              produit.quantite > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                              }`}>
+                              {produit.quantite} en stock
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              produit.statut === 'actif' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                            }`}>
-                              {produit.statut === 'actif' ? 'Actif' : 'Inactif'}
+                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${produit.disponible === 1 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                              }`}>
+                              {produit.disponible === 1 ? 'Disponible' : 'Indisponible'}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button 
+                            <button
                               onClick={() => { setSelectedProduct(produit); setActiveTab('ajouter'); }}
                               className="text-[#ec8d0c] hover:text-[#d97d0c] mr-3"
                             >
                               <FiEdit />
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDeleteProduct(produit.id)}
                               className="text-red-600 hover:text-red-900"
                             >
@@ -336,11 +301,19 @@ const MaBoutique = () => {
 
             {/* Ajouter/Modifier Produit Tab */}
             {activeTab === 'ajouter' && (
+
+
+
               <div className="p-6">
+                {succes && (
+                  <div className="bg-green-100 text-green-800 px-4 py-2 rounded mb-4 border border-green-300">
+                    {succes}
+                  </div>
+                )}
                 <h2 className="text-xl font-bold text-[#071726] mb-6">
                   {selectedProduct ? 'Modifier un produit' : 'Ajouter un nouveau produit'}
                 </h2>
-                
+
                 <form onSubmit={handleSaveProduct} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Nom */}
@@ -359,17 +332,20 @@ const MaBoutique = () => {
                     {/* Catégorie */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie *</label>
-                      <select 
+                      <select
                         name="categorie"
                         defaultValue={selectedProduct?.categorie || ''}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                         required
                       >
                         <option value="">Sélectionnez une catégorie</option>
-                        <option value="Vêtements">Vêtements</option>
+                        {/* <option value="Vêtements">Vêtements</option>
                         <option value="Accessoires">Accessoires</option>
                         <option value="Chaussures">Chaussures</option>
-                        <option value="Artisanat">Artisanat</option>
+                        <option value="Artisanat">Artisanat</option> */}
+                        {categorie.map((categorie)=>(
+                          <option value={categorie.id}>{categorie.nom}</option>
+                        ))}
                       </select>
                     </div>
 
@@ -383,14 +359,14 @@ const MaBoutique = () => {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                         placeholder="Prix en FCFA"
                         min="0"
-                        step="100"
+
                         required
                       />
                     </div>
 
                     {/* Réduction */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Réduction (%)</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Prix avant la réduction(optionnel) </label>
                       <input
                         type="number"
                         name="reduction"
@@ -398,13 +374,13 @@ const MaBoutique = () => {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                         placeholder="0"
                         min="0"
-                        max="100"
+
                       />
                     </div>
 
                     {/* Stock */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Quantité en stock *</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Quantité en stock (optionnel)</label>
                       <input
                         type="number"
                         name="stock"
@@ -412,20 +388,20 @@ const MaBoutique = () => {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                         placeholder="Quantité disponible"
                         min="0"
-                        required
+
                       />
                     </div>
 
                     {/* Statut */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
-                      <select 
-                        name="statut"
-                        defaultValue={selectedProduct?.statut || 'actif'}
+                      <select
+                        name="disponible"
+                        defaultValue={selectedProduct?.disponible || 'disponible'}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                       >
-                        <option value="actif">Actif</option>
-                        <option value="inactif">Inactif</option>
+                        <option value="1">Disponible</option>
+                        <option value="0">Indisponible</option>
                       </select>
                     </div>
                   </div>
@@ -449,9 +425,10 @@ const MaBoutique = () => {
                     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
                       <div className="space-y-1 text-center">
                         <div className="flex text-sm text-gray-600 justify-center">
+
                           <label className="relative cursor-pointer bg-white rounded-md font-medium text-[#ec8d0c] hover:text-[#d97d0c] focus-within:outline-none">
                             <span>Téléverser des fichiers</span>
-                            <input type="file" className="sr-only" multiple />
+                            <input type="file" className="sr-only" name='image[]' multiple />
                           </label>
                         </div>
                         <p className="text-xs text-gray-500">PNG, JPG jusqu'à 10MB</p>
@@ -460,7 +437,7 @@ const MaBoutique = () => {
                             {selectedProduct.images.map((img, index) => (
                               <div key={index} className="relative w-20 h-20 border rounded-md overflow-hidden">
                                 <img src={img} alt={`Produit ${index}`} className="w-full h-full object-cover" />
-                                <button 
+                                <button
                                   type="button"
                                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                                 >
@@ -504,47 +481,46 @@ const MaBoutique = () => {
                 <div className="space-y-4">
                   {commandes.map((commande) => (
                     <div key={commande.id} className="border border-gray-200 rounded-lg overflow-hidden">
-                      <div 
+                      <div
                         className="flex items-center justify-between p-4 bg-gray-50 cursor-pointer"
                         onClick={() => toggleOrderDetails(commande.id)}
                       >
                         <div>
-                          <h3 className="font-medium text-[#071726]">Commande #{commande.numero}</h3>
-                          <p className="text-sm text-gray-600">{commande.client} • {commande.date}</p>
+                          <h3 className="font-medium text-[#071726]">Commande #{commande.id}</h3>
+                          <p className="text-sm text-gray-600">{commande.user.nom} • {new Date(commande.created_at).toLocaleDateString('fr-FR')}</p>
                         </div>
                         <div className="flex items-center">
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            commande.statut === 'livrée' ? 'bg-green-100 text-green-800' :
-                            commande.statut === 'en cours' ? 'bg-blue-100 text-blue-800' :
-                            'bg-yellow-100 text-yellow-800'
-                          }`}>
-                            {commande.statut}
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${commande.etat === 'livrée' ? 'bg-green-100 text-green-800' :
+                            commande.statut === 'en attente' ? 'bg-blue-100 text-blue-800' :
+                              'bg-yellow-100 text-yellow-800'
+                            }`}>
+                            {commande.etat}
                           </span>
                           <span className="ml-4 text-gray-400">
                             {expandedOrder === commande.id ? <FiChevronUp /> : <FiChevronDown />}
                           </span>
                         </div>
                       </div>
-                      
+
                       {expandedOrder === commande.id && (
                         <div className="p-4 border-t border-gray-200">
                           <div className="mb-4">
                             <h4 className="font-medium text-gray-700 mb-2">Produits commandés</h4>
                             <ul className="space-y-2">
-                              {commande.produits.map((produit, index) => (
+                              {commande.commandeProduits.map((items, index) => (
                                 <li key={index} className="flex justify-between">
-                                  <span>{produit.nom} × {produit.quantite}</span>
-                                  <span>{produit.prix.toLocaleString()} FCFA</span>
+                                  <span>{items.produit.nom} × {produit.quantite}</span>
+                                  <span>{items.produit.prix.toLocaleString()} FCFA</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
                           <div className="flex justify-between border-t border-gray-200 pt-3">
                             <span className="font-medium">Total</span>
-                            <span className="font-bold">{commande.montant.toLocaleString()} FCFA</span>
+                            <span className="font-bold">{commande.montant_total.toLocaleString()} FCFA</span>
                           </div>
                           <div className="mt-4 flex justify-end space-x-3">
-                            {commande.statut === 'en cours' && (
+                            {commande.etat === 'en attente' && (
                               <>
                                 <button className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded hover:bg-green-200">
                                   Marquer comme livrée
@@ -573,13 +549,13 @@ const MaBoutique = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                   <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                     <h3 className="text-lg font-medium text-gray-500 mb-2">Ventes ce mois</h3>
-                    <p className="text-3xl font-bold text-[#071726]">24</p>
-                    <p className="text-sm text-green-600 mt-1">↑ 12% vs mois dernier</p>
+                    <p className="text-3xl font-bold text-[#071726]">{commandeMois}</p>
+                    <p className={`text-sm  mt-1 ${pourcentageCom>0 ? 'text-green-600' : 'text-red-600' }`}>{pourcentageCom>0? '↑':'' } {pourcentageCom}% vs mois dernier</p>
                   </div>
                   <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                     <h3 className="text-lg font-medium text-gray-500 mb-2">Revenus ce mois</h3>
-                    <p className="text-3xl font-bold text-[#071726]">245,000 FCFA</p>
-                    <p className="text-sm text-green-600 mt-1">↑ 8% vs mois dernier</p>
+                    <p className="text-3xl font-bold text-[#071726]">{revenuMois} FCFA</p>
+                    <p className={`text-sm  mt-1 ${pourcentageRev>0 ? 'text-green-600' : 'text-red-600' }`}>{pourcentageRev>0? '↑':'' } {pourcentageRev}% vs mois dernier</p>
                   </div>
                   <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                     <h3 className="text-lg font-medium text-gray-500 mb-2">Produits vus</h3>
@@ -598,21 +574,21 @@ const MaBoutique = () => {
                 <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                   <h3 className="text-lg font-medium text-gray-500 mb-4">Produits les plus populaires</h3>
                   <div className="space-y-4">
-                    {produits.slice(0, 3).map((produit) => (
+                    {produitPopulaires.map((produit) => (
                       <div key={produit.id} className="flex items-center">
                         <div className="flex-shrink-0 h-12 w-12 bg-gray-200 rounded-md overflow-hidden mr-4">
                           {produit.images && produit.images.length > 0 ? (
-                            <img className="h-full w-full object-cover" src={produit.images[0]} alt={produit.nom} />
+                            <img className="h-full w-full object-cover" src={`/storage/${produit.images[0].url}`} alt={produit.nom} />
                           ) : (
                             <FiImage className="h-full w-full text-gray-400 p-2" />
                           )}
                         </div>
                         <div className="flex-1">
                           <h4 className="font-medium text-[#071726]">{produit.nom}</h4>
-                          <p className="text-sm text-gray-500">12 ventes ce mois</p>
+                          <p className="text-sm text-gray-500">{produit.commandes_count} ventes</p>
                         </div>
                         <div className="text-[#071726] font-medium">
-                          {produit.prix.toLocaleString()} FCFA
+                          {produit.prix} FCFA
                         </div>
                       </div>
                     ))}
@@ -625,7 +601,7 @@ const MaBoutique = () => {
             {activeTab === 'parametres' && (
               <div className="p-6">
                 <h2 className="text-xl font-bold text-[#071726] mb-6">Paramètres de la boutique</h2>
-                <form className="space-y-6">
+                <form className="space-y-6" onClick={handleUpdateBoutique(boutique.id)}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la boutique *</label>
@@ -681,7 +657,7 @@ const MaBoutique = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Site web</label>
                       <input
                         type="url"
-                        defaultValue="https://www.modeafricaine.com"
+                        defaultValue={boutique.site_web}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                       />
                     </div>

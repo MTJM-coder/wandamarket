@@ -98,7 +98,7 @@ const Sidebar = () => {
                 <ul className="ml-8 space-y-1">
                   <li>
                     <Link 
-                      href="/seller/dashboard" 
+                      href="/boutique" 
                       className="block p-2 text-sm rounded-lg hover:bg-[#0d2a40] transition"
                     >
                       Tableau de bord

@@ -5,26 +5,13 @@ import {
   FiCreditCard, FiShield, FiGlobe, FiEye, FiEyeOff, FiCamera 
 } from 'react-icons/fi';
 import AuthenticatedLayout from './AuthenticatedLayout';
+import {usePage} from '@inertiajs/react';
 
 const Parametre = () => {
   // Données fictives pour l'utilisateur
-  const user = {
-    id: 1,
-    nom: 'ARTHUR',
-    prenom: 'DJATCHE',
-    email: 'wdows280@gmail.com',
-    telephone: '+237 686865807',
-    ville: 'Douala',
-    quartier: 'pk8',
-    image: '/images/profil/aicha.jpg',
-    role: 'vendeur',
-    boutique: {
-      nom: 'Mode Africaine by Aïcha',
-      ville: 'douala',
-      quartier: 'Mboppi'
-    }
-  };
 
+  const {props}=usePage();
+  const user =props.user;
   const [activeTab, setActiveTab] = useState('compte');
   const [showPassword, setShowPassword] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -50,12 +37,18 @@ const Parametre = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    put('/parametres/update');
+    put('/parametre/update');
   };
 
-  const handleFileChange = (e) => {
-    setData('image', e.target.files[0]);
-  };
+  const [preview, setPreview] = useState(user.image || null);
+
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    setData('image', file);
+    setPreview(URL.createObjectURL(file)); // Affiche un aperçu immédiat
+  }
+};
 
   // Méthodes de paiement fictives
   const paiements = [
@@ -94,7 +87,7 @@ const Parametre = () => {
                   onClick={() => setActiveTab('compte')}
                   className={`w-full text-left flex items-center px-4 py-3 rounded-lg transition ${activeTab === 'compte' ? 'bg-[#071726] text-white' : 'text-[#071726] hover:bg-gray-100'}`}
                 >
-                  <FiUser className="mr-3" />
+                  <FiUser className="mr-3"/>
                   Informations du compte
                 </button>
                 <button
@@ -122,7 +115,7 @@ const Parametre = () => {
                   onClick={() => setActiveTab('confidentialite')}
                   className={`w-full text-left flex items-center px-4 py-3 rounded-lg transition ${activeTab === 'confidentialite' ? 'bg-[#071726] text-white' : 'text-[#071726] hover:bg-gray-100'}`}
                 >
-                  <FiShield className="mr-3" />
+                  <FiShield className="mr-3"/>
                   Confidentialité
                 </button>
               </nav>
@@ -138,7 +131,7 @@ const Parametre = () => {
                     <div className="flex flex-col md:flex-row items-center mb-6">
                       <div className="relative w-32 h-32 rounded-full bg-gray-200 overflow-hidden mb-4 md:mb-0 md:mr-6">
                         <img 
-                          src={user.image || 'https://ui-avatars.com/api/?name=Aïcha+Diallo&background=071726&color=fff'} 
+                          src={preview|| 'https://ui-avatars.com/api/?name=Aïcha+Diallo&background=071726&color=fff'} 
                           alt="Profil" 
                           className="w-full h-full object-cover"
                         />
@@ -152,7 +145,7 @@ const Parametre = () => {
                         <p className="text-gray-600">{user.role === 'vendeur' ? 'Vendeur' : 'Client'}</p>
                         {user.role === 'vendeur' && (
                           <p className="text-sm text-gray-500 mt-1">
-                            Boutique: {user.boutique.nom}, {user.boutique.quartier}, {user.boutique.ville}
+                            {/* Boutique: {user.boutique.nom}, {user.boutique.quartier}, {user.boutique.ville} */}
                           </p>
                         )}
                       </div>

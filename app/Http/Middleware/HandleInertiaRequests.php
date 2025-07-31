@@ -37,6 +37,9 @@ class HandleInertiaRequests extends Middleware
                     : null,
                 // 'isVendeur' => $request->user()?->role === 'vendeur',
             ],
+            'flash' => [
+            'succes' => $request->session()->get('succes'),
+        ],
 
             'status' => fn() => $request->session()->get('status'),
 

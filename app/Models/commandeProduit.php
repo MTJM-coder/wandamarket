@@ -15,11 +15,12 @@ class CommandeProduit extends Model
         'prix_total',
     ];
 
-    public function commandes(){
+    public function commandes()
+    {
         return $this->belongsToMany(Commande::class);
     }
-
-    public function produits(){
-        return $this->belongsToMany(Produit::class);
+    public function produit()
+    {
+        return $this->belongsTo(Produit::class);
     }
 }
