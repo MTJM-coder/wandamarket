@@ -13,60 +13,26 @@ import {usePage} from '@inertiajs/react';
 const DashboardAchat = () => {
   const {props}=usePage();
 const commandeTotale= props.commandeTotal;
-const commandeEncour=props.commandeEncour;
+const commandeEncour=props.commandeEncours;
 const commadeAnnule=props.commadeAnnule;
 const commandeLivre=props.commandeLivre;
 const mtDepense=props.mtDepense;
+const mtDepenseMoisEncours=props.mtDepenseMoisEncours;
+const mtDepenseMoisPrecedent=props.mtDepenseMoisPrecedent;
 const favoris =props.favoris;
 const avis = props.avis;
 const commandeRecente=props.commandeRecente;
   // Données fictives
+  
+
   const stats = {
-    commandes: {
-      total: 12,
-      enCours: 3,
-      livrees: 8,
-      annulees: 1
-    },
-    depenses: {
-      total: 245000,
-      moisEnCours: 85000,
-      moisPrecedent: 160000
-    },
-   
-    avisDonnes: 5,
-    adresses: 2,
     paiements: [
-      { type: 'Mobile Money', derniersChiffres: '7890' },
-      { type: 'Carte Visa', derniersChiffres: '4213' }
+      { type: 'Carte de crédit', derniersChiffres: '1234' },
+      { type: 'PayPal', derniersChiffres: '5678' },
+      { type: 'Virement bancaire', derniersChiffres: '9012' }
     ]
   };
-
-  const commandesRecentes = [
-    {
-      id: 1,
-      numero: 'CMD-2023-045',
-      boutique: 'Mode Africaine',
-      date: '15/04/2023',
-      montant: 45000,
-      statut: 'Livrée',
-      produits: [
-        { nom: 'Robe Wax', prix: 25000, quantite: 1 },
-        { nom: 'Sac à Main', prix: 20000, quantite: 1 }
-      ]
-    },
-    {
-      id: 2,
-      numero: 'CMD-2023-046',
-      boutique: 'Artisanat ivoirien',
-      date: '18/04/2023',
-      montant: 18000,
-      statut: 'En cours',
-      produits: [
-        { nom: 'Statue Baoulé', prix: 18000, quantite: 1 }
-      ]
-    }
-  ];
+ 
 
   const suggestions = [
     {
@@ -86,7 +52,7 @@ const commandeRecente=props.commandeRecente;
   ];
 
   // Calcul des pourcentages
-  const evolutionDepenses = ((stats.depenses.moisEnCours - stats.depenses.moisPrecedent) / stats.depenses.moisPrecedent * 100).toFixed(1);
+  const evolutionDepenses =mtDepenseMoisPrecedent? ((mtDepenseMoisEncours - mtDepenseMoisPrecedent) / mtDepenseMoisPrecedent * 100) : 0;
 
   return (
     <AuthenticatedLayout>

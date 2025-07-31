@@ -7,6 +7,7 @@ use App\Models\AvisProduit;
 use App\Models\Commande;
 use App\Models\favoris;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,6 +32,17 @@ class dashboardController extends Controller
             $mtDepense=Commande::where('acheteur_id',$user->id)
                             ->where('etat','!=','annulée')
                             ->sum('montant_total');
+            $mtDepenseMoisEncours=Commande::where('acheteur_id',$user->id)
+                            ->where('etat','!=','annulée')
+                            ->whereYear('created_at', Carbon::now()->year)
+                            ->whereMonth('created_at', Carbon::now()->month)
+                            ->sum('montant_total');
+            $mtDepenseMoisPrecedent=Commande::where('acheteur_id',$user->id)
+                            ->where('etat','!=','annulée')
+                            ->whereYear('created_at', Carbon::now()->year)
+                            ->whereMonth('created_at', Carbon::now()->subMonth()->month)
+                            ->sum('montant_total');
+
 
             $favoris=favoris::where('user_id',$user->id)->count();
             $avisP=AvisProduit::where('acheteur_id',$user->id)->count();
@@ -38,7 +50,8 @@ class dashboardController extends Controller
             $avis=$avisB+$avisP;
 
             // $prod
-           
+        //    dd($mtDepenseMoisEncours-$mtDepenseMoisPrecedent)/($mtDepenseMoisPrecedent);
+          
 
         return Inertia::render('DashboardAchat',[
             'commandeTotal'=>$commandeTotal,
@@ -46,6 +59,8 @@ class dashboardController extends Controller
             'commadeAnnule'=>$commadeAnnule,
             'commandeLivre'=>$commandeLivre,
             'mtDepense'=>$mtDepense,
+            'mtDepenseMoisEncours'=>$mtDepenseMoisEncours,
+            'mtDepenseMoisPrecedent'=>$mtDepenseMoisPrecedent,
             'favoris'=>$favoris,
             'avis'=>$avis,
             'commandeRecente'=>$commande
