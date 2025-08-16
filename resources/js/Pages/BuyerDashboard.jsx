@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import NavBar2 from '../Layouts/Navbar2'
+import NavBar2 from '@/Layouts/Navbar2'
 import SideBar2 from '@/Layouts/SideBar2'
 import Products from '@/Layouts/products'
 import { FiRotateCcw, FiShoppingBag, FiTruck, FiClock, FiEye, FiTrash2, FiPackage, FiMapPin } from 'react-icons/fi'
@@ -13,8 +13,8 @@ const BuyerDashboard = () => {
   const [showDasboard,setShowDasboard]=useState(true)
 
   const handleShowCommande=()=>{
-    setShowDasboard=false,
-    setShowCommande=true
+    setShowDasboard(false),
+    setShowCommande(true)
   }
   
 
@@ -167,7 +167,7 @@ const BuyerDashboard = () => {
 
   return (
     <>
-      <NavBar2 />
+      <NavBar2/>
       <SideBar2 />
       <div className='mt-32  md:ml-32'>
        <div>
