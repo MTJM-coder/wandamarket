@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import { 
   FiHome, FiShoppingBag, FiHeart, FiUser, FiSettings, 
   FiCreditCard, FiMessageSquare, FiHelpCircle, FiLogOut,
-  FiChevronDown, FiChevronRight
+  FiChevronDown, FiChevronRight,FiMessageCircle
 } from 'react-icons/fi';
 import { FaStore } from 'react-icons/fa';
 import { motion } from 'framer-motion';
@@ -54,6 +54,16 @@ const Sidebar = () => {
           </li>
 
           <li>
+            <Link
+              href="/message"
+              className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
+            
+            >
+            <FiMessageSquare className="mr-3"/>
+            <span>Messages</span>
+            </Link>
+          </li>
+          <li>
             <Link 
               href="/produit" 
               className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
@@ -65,6 +75,7 @@ const Sidebar = () => {
 
           <li>
             <Link 
+            
               href="/favoirs" 
               className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
             >

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\dashboardController;
 
+use function Pest\Laravel\get;
 
 Route::get('/', function () {
     $visite = new visite();
@@ -28,6 +29,25 @@ Route::get('/', function () {
 
     return Inertia::render('Welcome', []);
 })->name('connexion');
+
+Route::get('/buyer/dashboard', function () {
+    return Inertia::render('BuyerDashboard', []);
+})->name('connexion');
+Route::get('/buyer/order', function () {
+    return Inertia::render('Commandes', []);
+})->name('connexion');
+Route::get('/buyer/order/detail', function () {
+    return Inertia::render('DetailCommande', []);
+})->name('connexion');
+
+Route::get('/product', function () {
+    return Inertia::render('ProductPage', []);
+})->name('connexion');
+
+Route::get('/detail-product', function () {
+    return Inertia::render('Panier', []);
+})->name('connexion');
+
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
 

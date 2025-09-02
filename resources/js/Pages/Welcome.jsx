@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { FiShoppingBag, FiUser, FiStar, FiHeart, FiSearch, FiArrowRight } from 'react-icons/fi';
 import { FaStore, FaShoppingCart, FaRegBell } from 'react-icons/fa';
-import { Head, Link } from '@inertiajs/react'; // Utilisez le Link d'Inertia
+import { Link } from '@inertiajs/react'; // Link Inertia.js
 
 const HomePage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,7 +17,7 @@ const HomePage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Données des produits
+  // Données des produits avec ids uniques
   const trendingProducts = [
     {
       id: 1,
@@ -26,29 +27,28 @@ const HomePage = () => {
       rating: 4.5,
       category: 'Mode',
       image: '/images/wax-dress.jpg',
-      description: 'Collection exclusive de robes en wax 100% africain'
+      description: 'Collection exclusive de robes en wax 100% africain',
     },
     {
-      id: 1,
-      name: 'Robes en Wax Authentique',
+      id: 2,
+      name: 'Tissus Africains Colorés',
       shop: 'Boutique Afrique Élégance',
-      price: '15 000 FCFA',
-      rating: 4.5,
+      price: '10 000 FCFA',
+      rating: 4.0,
       category: 'Mode',
-      image: '/images/wax-dress.jpg',
-      description: 'Collection exclusive de robes en wax 100% africain'
+      image: '/images/african-fabrics.jpg',
+      description: 'Tissus authentiques pour vos créations',
     },
     {
-      id: 1,
-      name: 'Robes en Wax Authentique',
-      shop: 'Boutique Afrique Élégance',
-      price: '15 000 FCFA',
+      id: 3,
+      name: 'Bijoux Traditionnels',
+      shop: 'Artisanat du Cameroun',
+      price: '25 000 FCFA',
       rating: 2.5,
-      category: 'Mode',
-      image: '/images/wax-dress.jpg',
-      description: 'Collection exclusive de robes en wax 100% africain'
+      category: 'Artisanat',
+      image: '/images/traditional-jewelry.jpg',
+      description: 'Bijoux faits main par nos artisans locaux',
     },
-    // ... autres produits
   ];
 
   const categories = [
@@ -56,36 +56,27 @@ const HomePage = () => {
     { name: 'Alimentation', icon: <FiShoppingBag size={24} /> },
     { name: 'Artisanat', icon: <FiShoppingBag size={24} /> },
     { name: 'Cosmétiques', icon: <FiShoppingBag size={24} /> },
-    { name: 'Électronique', icon: <FiShoppingBag size={24} /> }
+    { name: 'Électronique', icon: <FiShoppingBag size={24} /> },
   ];
 
   return (
     <Router>
       <div className="min-h-screen bg-gray-50 font-sans">
-        {/* Header avec image de fond */}
+        {/* Header */}
         <header className={`relative transition-all duration-300 ${isScrolled ? 'h-20' : 'h-96'}`}>
-          {/* Image de fond pour le header */}
           <div className="absolute inset-0 bg-[#071726] overflow-hidden">
-            <img 
-              src="cmr.png" 
-              alt="Marché camerounais"
-              className="w-full h-full object-cover opacity-40"
-            />
+            <img src="cmr.png" alt="Marché camerounais" className="w-full h-full object-cover opacity-40" />
           </div>
-          
-          {/* Overlay coloré */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#071726] to-[#071726]/40"></div>
-          
-          {/* Contenu du header */}
+
           <div className={`relative z-10 container mx-auto px-4 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-6'}`}>
             <div className="flex justify-between items-center">
-              
               <div className="flex items-center space-x-2">
-                <img src="loh.ico" alt="" className='w-auto h-12'/>
+                <img src="loh.ico" alt="Logo" className="w-auto h-12" />
                 <div className="text-white font-bold text-3xl">WANDA</div>
                 <div className="text-[#ec8d0c] font-bold text-3xl">MARKET</div>
               </div>
-              
+
               {/* Navigation principale */}
               <nav className={`hidden md:flex space-x-8 items-center transition-all ${isScrolled ? 'opacity-90' : 'opacity-100'}`}>
                 <Link to="/" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
@@ -98,29 +89,46 @@ const HomePage = () => {
                   <FaStore className="mr-2" /> Vendre
                 </Link>
               </nav>
-              
+
               {/* Actions utilisateur */}
-              <div className="flex items-center space-x-4">
-                <button className="p-2 text-white hover:text-[#ec8d0c] transition">
-                  <FiSearch size={20} />
+              <div className="relative flex items-center gap-4 md:gap-6">
+                <button
+                  className="p-2 text-white hover:text-[#ec8d0c] transition z-20"
+                  onClick={() => setShowSearch(!showSearch)}
+                  aria-label="Toggle search input"
+                >
+                  <FiSearch className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
+
+                {showSearch && (
+                  <input
+                    type="text"
+                    placeholder="Rechercher..."
+                    className="absolute top-full left-0 mt-2 w-48 md:w-64 p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ec8d0c] z-10 bg-white"
+                    autoFocus
+                  />
+                )}
+
                 <button className="p-2 text-white hover:text-[#ec8d0c] transition">
-                  <FaShoppingCart size={20} />
+                  <FaShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
+
                 <button className="p-2 text-white hover:text-[#ec8d0c] transition">
-                  <FaRegBell size={20} />
+                  <FaRegBell className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
-                <Link 
-                  href="/connexion" 
+
+                <Link
+                  to="/connexion"
                   className="hidden md:flex items-center space-x-1 px-4 py-2 bg-[#d93d0f] rounded-md hover:bg-[#ec8d0c] transition"
                 >
-                  <FiUser size={18} />
+                  <FiUser className="w-4 h-4 md:w-5 md:h-5" />
                   <span>Connexion</span>
                 </Link>
               </div>
+
             </div>
-            
-            {/* se réduit quand on scroll */}
+
+            {/* Contenu header quand pas scroll */}
             {!isScrolled && (
               <div className="mt-16 text-center max-w-3xl mx-auto">
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-fadeIn">
@@ -130,14 +138,14 @@ const HomePage = () => {
                   Découvrez les meilleurs produits locaux et soutenez l'économie camerounaise
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <Link 
-                    to="/products" 
+                  <Link
+                    to="/products"
                     className="px-8 py-3 bg-[#ec8d0c] text-white font-bold rounded-lg hover:bg-[#d93d0f] transition transform hover:scale-105 flex items-center justify-center"
                   >
                     Explorer les produits <FiArrowRight className="ml-2" />
                   </Link>
-                  <Link 
-                    href="/connexion" 
+                  <Link
+                    to="/connexion"
                     className="px-8 py-3 bg-white text-[#071726] font-bold rounded-lg hover:bg-gray-100 transition transform hover:scale-105 flex items-center justify-center"
                   >
                     Créer ma boutique <FaStore className="ml-2" />
@@ -150,7 +158,7 @@ const HomePage = () => {
 
         {/* Contenu principal */}
         <main className="relative z-0">
-          {/* Section Catégories */}
+          {/* Catégories */}
           <section className="py-16 container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-[#071726] mb-4">Nos Catégories</h2>
@@ -158,7 +166,7 @@ const HomePage = () => {
                 Parcourez nos différentes catégories pour trouver exactement ce que vous cherchez
               </p>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
               {categories.map((category, index) => (
                 <Link
@@ -168,7 +176,10 @@ const HomePage = () => {
                   onMouseEnter={() => setHoveredProduct(index)}
                   onMouseLeave={() => setHoveredProduct(null)}
                 >
-                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 ${hoveredProduct === index ? 'bg-[#ec8d0c] text-white' : 'bg-[#071726]/5 text-[#071726]'}`}>
+                  <div
+                    className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 ${hoveredProduct === index ? 'bg-[#ec8d0c] text-white' : 'bg-[#071726]/5 text-[#071726]'
+                      }`}
+                  >
                     {category.icon}
                   </div>
                   <h3 className="font-semibold text-[#071726] group-hover:text-[#d93d0f] transition">{category.name}</h3>
@@ -177,25 +188,23 @@ const HomePage = () => {
             </div>
           </section>
 
-          {/* Section Produits tendances */}
+          {/* Produits tendances */}
           <section className="py-16 bg-gradient-to-b from-white to-gray-50">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-[#071726] mb-4">Produits Tendances</h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
-                  Découvrez les produits les plus populaires du moment
-                </p>
+                <p className="text-gray-600 max-w-2xl mx-auto">Découvrez les produits les plus populaires du moment</p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {trendingProducts.map((product) => (
-                  <div 
-                    key={product.id} 
+                  <div
+                    key={product.id}
                     className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-2"
                   >
                     <div className="relative overflow-hidden h-60">
-                      <img 
-                        src={product.image} 
+                      <img
+                        src={product.image}
                         alt={product.name}
                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                       />
@@ -203,16 +212,16 @@ const HomePage = () => {
                         <FiHeart size={20} />
                       </button>
                     </div>
-                    
+
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="font-bold text-lg text-[#071726]">{product.name}</h3>
                         <span className="bg-[#071726]/10 text-[#071726] text-xs px-3 py-1 rounded-full">{product.category}</span>
                       </div>
-                      
+
                       <p className="text-sm text-gray-500 mb-3">{product.shop}</p>
                       <p className="text-gray-700 mb-4">{product.description}</p>
-                      
+
                       <div className="flex items-center mb-4">
                         {[...Array(5)].map((_, i) => (
                           <svg
@@ -226,10 +235,10 @@ const HomePage = () => {
                         ))}
                         <span className="text-xs text-gray-500 ml-1">({product.rating})</span>
                       </div>
-                      
+
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-[#d93d0f]">{product.price}</span>
-                        <Link 
+                        <Link
                           to={`/product/${product.id}`}
                           className="px-5 py-2 bg-[#071726] text-white text-sm rounded-md hover:bg-[#ec8d0c] transition flex items-center"
                         >
@@ -240,9 +249,9 @@ const HomePage = () => {
                   </div>
                 ))}
               </div>
-              
+
               <div className="text-center mt-12">
-                <Link 
+                <Link
                   to="/products"
                   className="inline-flex items-center px-6 py-3 border border-[#071726] text-[#071726] font-medium rounded-md hover:bg-[#071726] hover:text-white transition"
                 >
@@ -252,14 +261,14 @@ const HomePage = () => {
             </div>
           </section>
 
-          {/* CTA pour vendre */}
+          {/* CTA vendre */}
           <section className="py-16 bg-[#071726] text-white">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl font-bold mb-6">Vous êtes artisan ou commerçant ?</h2>
               <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
                 Rejoignez WANDA MARKET et augmentez votre visibilité en vendant vos produits à travers tout le Cameroun
               </p>
-              <Link 
+              <Link
                 to="/create-shop"
                 className="inline-flex items-center px-8 py-4 bg-[#ec8d0c] text-white font-bold rounded-lg hover:bg-[#d93d0f] transition transform hover:scale-105"
               >
@@ -270,9 +279,7 @@ const HomePage = () => {
         </main>
 
         {/* Pied de page */}
-        <footer className="bg-gray-900 text-gray-300 py-12">
-         
-        </footer>
+        <footer className="bg-gray-900 text-gray-300 py-12"></footer>
       </div>
     </Router>
   );
