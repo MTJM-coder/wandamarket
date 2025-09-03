@@ -55,7 +55,7 @@ const Sidebar = () => {
 
           <li>
             <Link
-              href="/message"
+              href="/messagerie"
               className="flex items-center p-3 rounded-lg hover:bg-[#0d2a40] transition"
             
             >

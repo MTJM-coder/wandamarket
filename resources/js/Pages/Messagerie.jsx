@@ -65,6 +65,8 @@ const Messagerie = () => {
         setInputMsg("");
     };
 
+    const [fav, setFav] = useState(false);
+
     return (
         <div className="flex h-screen sm:flex md:flex bg-white">
             {showContenu === 'nothing' && (
@@ -79,6 +81,22 @@ const Messagerie = () => {
                                     </button>
                                     <button className="flex rounded items-center hover:bg-zinc-100 pl-2 mt-1 mb-1 pt-2 pb-2">
                                         <FaHeart className="mr-2" /> Favoris
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                        {fav && (
+                            <div className="absolute rounded md:ml-60 lg:ml-80 xl:mr-auto bg-white overflow-y-auto p-3 border border-[#ec8d0c] mt-16 mr-10 z-30 ml-20 h-96 w-64">
+                                <div>
+                                    <div className="font-semibold">Favoris</div>
+                                    <input type="search" placeholder="Rechercher" className="w-full h-8 mt-3" />
+                                </div>
+                                <div className="overflow-y-auto">
+                                    <button className="flex mt-2 w-full hover:bg-gray-100 border p-1 rounded-lg">
+                                        <div className="rounded-full bg-gray-50">
+                                            <FiUser className="m-3 size-5" />
+                                        </div>
+                                        <div className="m-2">Nom</div>
                                     </button>
                                 </div>
                             </div>
@@ -108,7 +126,7 @@ const Messagerie = () => {
                                 <button className="w-5 ml-4" onClick={FILTRER} onBlur={NOFILTRER}>
                                     <FiFilter className="size-full text-[#ec8d0c]" />
                                 </button>
-                                <button className="w-5 ml-4">
+                                <button onClick={()=>setFav(true)} onBlur={()=>setFav(false)} className="w-5 ml-4">
                                     <FaHeart className="size-full text-[#ec8d0c]" />
                                 </button>
                             </div>

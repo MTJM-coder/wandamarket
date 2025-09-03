@@ -26,7 +26,7 @@ const HomePage = () => {
       price: '15 000 FCFA',
       rating: 4.5,
       category: 'Mode',
-      image: '/images/wax-dress.jpg',
+      image: 'machine.png',
       description: 'Collection exclusive de robes en wax 100% africain',
     },
     {
@@ -36,7 +36,7 @@ const HomePage = () => {
       price: '10 000 FCFA',
       rating: 4.0,
       category: 'Mode',
-      image: '/images/african-fabrics.jpg',
+      image: 'phone.png',
       description: 'Tissus authentiques pour vos créations',
     },
     {
@@ -46,7 +46,7 @@ const HomePage = () => {
       price: '25 000 FCFA',
       rating: 2.5,
       category: 'Artisanat',
-      image: '/images/traditional-jewelry.jpg',
+      image: 'wach.png',
       description: 'Bijoux faits main par nos artisans locaux',
     },
   ];
@@ -79,13 +79,13 @@ const HomePage = () => {
 
               {/* Navigation principale */}
               <nav className={`hidden md:flex space-x-8 items-center transition-all ${isScrolled ? 'opacity-90' : 'opacity-100'}`}>
-                <Link to="/" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
+                <Link href="/" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
                   <FiShoppingBag className="mr-2" /> Boutiques
                 </Link>
-                <Link to="/categories" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
+                <Link href="/categories" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
                   <FiStar className="mr-2" /> Catégories
                 </Link>
-                <Link to="/vendre" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
+                <Link href="/vendre" className="text-white hover:text-[#ec8d0c] font-medium flex items-center">
                   <FaStore className="mr-2" /> Vendre
                 </Link>
               </nav>
@@ -113,12 +113,12 @@ const HomePage = () => {
                   <FaShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
 
-                <button className="p-2 text-white hover:text-[#ec8d0c] transition">
+                <a href='notifications' className="p-2 text-white hover:text-[#ec8d0c] transition">
                   <FaRegBell className="w-5 h-5 md:w-6 md:h-6" />
-                </button>
+                </a>
 
                 <Link
-                  to="/connexion"
+                  href="/connexion"
                   className="hidden md:flex items-center space-x-1 px-4 py-2 bg-[#d93d0f] rounded-md hover:bg-[#ec8d0c] transition"
                 >
                   <FiUser className="w-4 h-4 md:w-5 md:h-5" />
@@ -139,13 +139,13 @@ const HomePage = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <Link
-                    to="/products"
+                    href="/products"
                     className="px-8 py-3 bg-[#ec8d0c] text-white font-bold rounded-lg hover:bg-[#d93d0f] transition transform hover:scale-105 flex items-center justify-center"
                   >
                     Explorer les produits <FiArrowRight className="ml-2" />
                   </Link>
                   <Link
-                    to="/connexion"
+                    href="/connexion"
                     className="px-8 py-3 bg-white text-[#071726] font-bold rounded-lg hover:bg-gray-100 transition transform hover:scale-105 flex items-center justify-center"
                   >
                     Créer ma boutique <FaStore className="ml-2" />
@@ -170,7 +170,7 @@ const HomePage = () => {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
               {categories.map((category, index) => (
                 <Link
-                  to={`/category/${category.name.toLowerCase()}`}
+                  href={`/category/${category.name.toLowerCase()}`}
                   key={index}
                   className="group bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-[#ec8d0c]/30 text-center"
                   onMouseEnter={() => setHoveredProduct(index)}
@@ -239,7 +239,7 @@ const HomePage = () => {
                       <div className="flex justify-between items-center">
                         <span className="font-bold text-[#d93d0f]">{product.price}</span>
                         <Link
-                          to={`/product/${product.id}`}
+                          href={`/product/${product.id}`}
                           className="px-5 py-2 bg-[#071726] text-white text-sm rounded-md hover:bg-[#ec8d0c] transition flex items-center"
                         >
                           Acheter <FiArrowRight className="ml-1" />
@@ -252,7 +252,7 @@ const HomePage = () => {
 
               <div className="text-center mt-12">
                 <Link
-                  to="/products"
+                  href="/products"
                   className="inline-flex items-center px-6 py-3 border border-[#071726] text-[#071726] font-medium rounded-md hover:bg-[#071726] hover:text-white transition"
                 >
                   Voir tous les produits <FiArrowRight className="ml-2" />
@@ -269,7 +269,7 @@ const HomePage = () => {
                 Rejoignez WANDA MARKET et augmentez votre visibilité en vendant vos produits à travers tout le Cameroun
               </p>
               <Link
-                to="/create-shop"
+                href="/create-shop"
                 className="inline-flex items-center px-8 py-4 bg-[#ec8d0c] text-white font-bold rounded-lg hover:bg-[#d93d0f] transition transform hover:scale-105"
               >
                 Créer ma boutique gratuitement <FaStore className="ml-3" />

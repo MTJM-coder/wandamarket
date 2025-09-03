@@ -108,3 +108,10 @@ Route::get('/favoirs', function () {
     ]);
 })->name('connexion');
 
+Route::get('/notifications', function (){
+    return Inertia::render('Notification');
+})->name('notification');
+
+Route::get('/messagerie', function(){
+    return Inertia::render('Messagerie');
+})->name('messagerie');
