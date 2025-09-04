@@ -141,6 +141,7 @@ Route::get('/admin/dashboard', function () {
 Route::get('/admin/sellers', function () {
     return Inertia::render('AdminSeller', []);
 })->name('connexion');
+
 Route::get('/admin/clients',function(){
     return Inertia::render('AdminClient',[]);
 });
@@ -152,12 +153,24 @@ Route::get('/admin/orders',function(){
 Route::get('admin/products',function(){
     return Inertia::render('AdminProduct',[]);
 });
+
 Route::get('/admin/payments',function(){
     return Inertia::render('abonnement',[]);
 });
+
 Route::get('/admin/settings',function(){
     return Inertia::render('AdminParametre',[]);
 });
+
 Route::get('/admin/admins',function(){
     return Inertia::render('Admin',[]);
 });
+
+// notifications et messagerie
+Route::get('/notifications', function (){
+    return Inertia::render('Notification');
+})->name('notification');
+
+Route::get('/messagerie', function(){
+    return Inertia::render('Messagerie');
+})->name('messagerie');

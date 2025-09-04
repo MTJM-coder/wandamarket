@@ -61,9 +61,9 @@ const vendeur = props.auth.user.role ==='vendeur' || false;
               </span>
             </Link>
 
-            <button className="p-2 relative">
+            <a href='notifications' className="p-2 relative">
               <FiBell className="text-[#071726] h-6 w-6" />
-            </button>
+            </a>
 
             {/* Menu profil */}
             <div className="relative">
