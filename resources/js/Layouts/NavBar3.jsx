@@ -75,7 +75,7 @@ const NavBar3 = ({ activeTab, produit, commandes , clients = [] }) => {
                             >
                                 <FiShoppingBag /> Mes commandes
                             </li>
-                            <li className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+                            <li className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer" onClick={()=>redirigerVers('/notifications')}>
                                 <FiBell /> Notifications
                             </li>
                             <li className="px-4 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer"

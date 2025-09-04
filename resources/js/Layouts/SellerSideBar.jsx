@@ -57,7 +57,7 @@ const sellerSideBar = ({ activeTab, setActiveTab }) => {
                         if (value === "Accueil") window.location.href = '/seller/dashboard';
                         if (value === "commandes") window.location.href = "/seller/order";
                         else if (value === "produits") window.location.href = "/seller/produits";
-                        else if (value === "messages") window.location.href = "/seller/messages";
+                        else if (value === "messages") window.location.href = "/messagerie";
                         else if (value === "clients") window.location.href = "/seller/clients";
                         else if (value === "statistiques") window.location.href = "/seller/stats";
                         else if (value === "parametres") window.location.href = "/parametre";

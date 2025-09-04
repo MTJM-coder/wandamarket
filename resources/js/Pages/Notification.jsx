@@ -57,7 +57,7 @@ const Notification = () =>{
 
     return (
         <div className="w-screen h-screen ">
-            <div className="bg-[#ec8d0c] h-20 fixed w-screen shadow-2xl pt-6 pb-6 text-white grid-flow-col grid ">
+            <div className="bg-orange-500 h-20 fixed w-screen shadow-2xl pt-6 pb-6 text-white grid-flow-col grid ">
                 <div className="flex items-center xl:ml-10 md:ml-20 w-screen xl:h-10 sm:w-80 text-black border bg-white rounded-3xl ">
                     <FiSearch className="ml-2 size-6" />
                     <input

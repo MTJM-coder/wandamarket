@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaArrowLeft, FaPlusCircle, FaThumbtack, FaEnvelope, FaHeart } from "react-icons/fa";
 import { FiFilter, FiSearch, FiSend, FiUser } from "react-icons/fi";
+import SellerSideBar from "@/Layouts/SellerSideBar";
 
 const Messagerie = () => {
 
@@ -23,6 +24,7 @@ const Messagerie = () => {
     const [inputMsg, setInputMsg] = useState("");
 
     const dernierMessage = discussion[discussion.length -1]
+    const [activeTab,setActiveTab]=useState("messages")
 
     const More = (e, id) => {
         e.preventDefault();
@@ -69,6 +71,9 @@ const Messagerie = () => {
 
     return (
         <div className="flex h-screen sm:flex md:flex bg-white">
+            <div className="md:hidden">
+            <SellerSideBar  activeTab={activeTab} setActiveTab={setActiveTab}/>
+            </div>
             {showContenu === 'nothing' && (
                 <>
                     <div className="flex-shrink-0 sm:w-1/2 relative md:w-2/5 w-full sm:shadow-xl bg-white z-10">
