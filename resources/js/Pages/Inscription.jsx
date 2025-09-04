@@ -77,7 +77,7 @@ console.log(errors)
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Déjà inscrit?{' '}
-            <Link href="/login" className="font-medium text-[#d93d0f] hover:text-[#ec8d0c]">
+            <Link href="/connexion" className="font-medium text-[#d93d0f] hover:text-[#ec8d0c]">
               Connectez-vous
             </Link>
           </p>

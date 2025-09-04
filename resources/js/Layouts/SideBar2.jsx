@@ -15,7 +15,7 @@ const SideBar2 = ({activeTab,setActiveTab}) => {
 
 
   const menuItems = [
-    { id: 1, label: 'Accueil', icon: <FiHome className='text-2xl' /> },
+    { id: 1, label: 'Moi', icon: <FiHome className='text-2xl' /> },
     { id: 2, label: 'Articles', icon: <FiShoppingBag className='text-2xl' /> },
     { id: 3, label: 'Messages', icon: <FiMessageSquare className='text-2xl' /> },
     { id: 4, label: 'Commandes', icon: <FiInbox className='text-2xl' /> },
@@ -53,7 +53,7 @@ const SideBar2 = ({activeTab,setActiveTab}) => {
           onClick={() => {
     setActiveTab(label);
     // Redirection directe sans useEffect
-    if (label === "Accueil") window.location.href = '/buyer/dashboard';
+    if (label === "Moi") window.location.href = '/buyer/dashboard';
     else if (label === "Commandes") window.location.href = "/buyer/order";
     else if (label === "Articles") window.location.href = "/product";
     else if (label === "Messages") window.location.href = "/buyer/messages";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaStore } from 'react-icons/fa';
+import { FaMapPin, FaStore } from 'react-icons/fa';
 import { FiStar, FiMapPin, FiShoppingCart, FiHeart} from 'react-icons/fi';
 
 const Products = ({ filters, searchTerm }) => {
@@ -196,8 +196,8 @@ const Products = ({ filters, searchTerm }) => {
                         <p className="md:text-md text-sm font-bold">{product.price}</p>
                         <p className="line-through text-[10px] text-red-500">{product.oldPrice}</p>
                         <p className="font-serif text-xs  mt-2 text-gray-300 flex items-center gap-1">
-                            <FaStore/>
-                            <i>{product.seller}</i>
+                            <FiMapPin/>
+                            <i>{product.location}</i>
                         </p>
                         {/* <p className="mt-1">
                             <FiMapPin className="inline" /> {product.location}

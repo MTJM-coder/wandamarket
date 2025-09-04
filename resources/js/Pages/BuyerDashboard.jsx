@@ -164,7 +164,7 @@ const BuyerDashboard = () => {
 
     }
   ]
-  const [activeTab, setActiveTab] = useState('Accueil');
+  const [activeTab, setActiveTab] = useState('Moi');
 
   return (
     <>

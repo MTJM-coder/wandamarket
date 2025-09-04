@@ -60,7 +60,7 @@ const NavBar2 = ({ searchTerm, setSearchTerm, filters = {}, setFilters, number, 
                 <FiShoppingCart className="md:text-2xl text-gray-600 hover:text-orange-500 " />
               </div>
               {number > 0 && (
-                <span className="absolute -top-[-10px] -right-2 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-[-10px] -right-20 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {number}
                 </span>
               )}
