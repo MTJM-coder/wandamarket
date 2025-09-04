@@ -1,6 +1,6 @@
 import NavBar2 from "@/Layouts/NavBar2";
 import SideBar2 from "@/Layouts/SideBar2";
-import React from "react";
+import React, { useState } from "react";
 import { FiMapPin } from "react-icons/fi";
 
 const Commandes = () => {
@@ -32,23 +32,27 @@ const Commandes = () => {
       imageUrl: "/dressGirl.png",
     },
   ];
+  const [activeTab,setActiveTab]=useState("Commandes")
+  const redirigerVers=(lien)=>{
+    window.location.href=lien
+  }
 
   return (
     <>
     <NavBar2/>
-     <SideBar2 className="mt-0"/>
+     <SideBar2 className="mt-0" activeTab={activeTab} setActiveTab={setActiveTab}/>
     <div className="md:ml-32 px-4 md:px-0 mt-24">
        
       <h1 className="font-bold text-2xl mb-5">Vos commandes</h1>
-      <div className="border-b mb-5 text-end space-x-10">
+      <div className="border-b mb-5 md:text-end md:space-x-10  space-x-5">
         <button className="border-b-black border-b-2">Toutes</button>
-        <button className="">En attente</button>
-        <button className="">En cours</button>
-        <button className="">Livrée</button>
+        <button className="">en attente</button>
+        <button className="">en cours</button>
+        <button className="">Livrée</button> 
       </div>
 
       {COMMANDES.map((COMMANDE) => (
-        <div key={COMMANDE.id} className="p-6 bg-gray-100">
+        <div key={COMMANDE.id} className="p-1 md:p-6 bg-gray-100">
               <div className="max-w-4xl mx-auto bg-white shadow rounded-2xl p-6">
                 {/* En-tête commande */}
                 <div className="flex flex-col md:flex-row justify-between text-sm text-gray-600 border-b pb-4">
@@ -64,7 +68,7 @@ const Commandes = () => {
                   <div className="flex items-center mt-2 text-sm text-gray-600">
                     <FiMapPin className="mr-2" />
                     <span>{COMMANDE.adresse}</span>
-                    <a href="#" className="ml-3 text-blue-600 hover:underline">Suivre le colis</a>
+                    <a href="/buyer/order/detail" className="ml-3 text-blue-600 hover:underline">Suivre le colis</a>
                   </div>
                 </div>
         

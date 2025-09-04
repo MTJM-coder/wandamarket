@@ -122,5 +122,18 @@ class BoutiqueController extends Controller
             return redirect()->route('connexion');
         }
     }
+    public function sellerProduct(){
+        if(Auth::user()){
+            $user=Auth::user();
+            $user_id = $user->id;
+            $boutique = Boutique::where('user_id', $user_id)->first();
+              $produit = Produit::where('boutique_id', $boutique->id)
+                ->with('images')
+                ->get();
+        return Inertia::render('SellerProducts',[
+            "produits"=>$produit
+        ]);
+        }
+    }
 }
 

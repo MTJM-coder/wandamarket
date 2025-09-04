@@ -164,19 +164,20 @@ const BuyerDashboard = () => {
 
     }
   ]
+  const [activeTab, setActiveTab] = useState('Accueil');
 
   return (
     <>
       <NavBar2/>
-      <SideBar2 />
-      <div className='mt-32  md:ml-32'>
-       <div>
+      <SideBar2 activeTab={activeTab} setActiveTab={setActiveTab} />
+      <div className='mt-20  md:ml-32 grid'>
+       <div className='grid mx-9 md:mx-0 '>
           <h1 className='text-2xl font-bold'>Tableau de bord acheteur</h1>
           <p className='text-xs text-gray-400'>Bienvenue, suivez vos commandes, messages et favoris.</p>
         </div>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
+        <div className='grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 grid mx-3 md:mx-0 '>
           {Counter.map((item) => (
-            <div className='bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex items-start gap-4'>
+            <div className='bg-white rounded-2xl p-5   shadow-sm border border-gray-100 flex items-start gap-4 '>
               <div key={item.id} className='h-11 w-11 flex items-center justify-center rounded-full bg-slate-200'>
                 {item.icone}
               </div>

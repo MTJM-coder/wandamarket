@@ -10,20 +10,25 @@ const DetailProduct = ({product}) => {
         "/shoes.png",
         "/sac1.webp"
     ]
+
+const [isInCart,setIsInCart]=useState([]);
+
+// const addCart
+
+
     const [alertAddCart, setAlertAddCart] = useState(false)
     useEffect(() => {
         if (alertAddCart) {
             const timer = setTimeout(() => {
                 setAlertAddCart(false);
-            }, 2000); // Disparaît après 2 secondes
-
+            }, 2000); 
             return () => clearTimeout(timer); // Nettoyage si le composant est démonté
         }
     }, [alertAddCart]);
 
     const [number, setNumber] = useState(0)
     const handleCommander = () => {
-        setNumber(number + 1)
+        // setNumber(number + 1)
         alert("Produit ajouté au panier")
     }
 
@@ -63,6 +68,14 @@ const DetailProduct = ({product}) => {
             localisation: "Dschang",
             imageUrl: "/shoes.png",
             prix: "10000 FCFA"
+        }
+    ]
+    
+    const  products=[
+        {
+        id:1,
+        nom:"banane",
+        prix:10000
         }
     ]
 
@@ -111,22 +124,20 @@ const DetailProduct = ({product}) => {
     const { cart, addToCart } = AddCart();
     const handleAddToCart = () => {
         const productToAdd = {
-            id: product.id,
-            name: product.name,
+            id: 1,
+            name: "bonjour",
             imageUrl: images[currentIndex],
-            price: prix,
+            price: "10000",
             quantity: addQuantity
         };
         addToCart(productToAdd);
-    }
         
-
-   
+    }
         return (
             <>
                 <NavBar2
-                    number={number}
-                    setNumber={setNumber}
+                    number={cart.length}
+                    // setNumber={setNumber}
                 />
                 {alertAddCart && (
                     <div
@@ -139,7 +150,7 @@ const DetailProduct = ({product}) => {
                         <span>Produit Ajouté au panier</span>
                     </div>
                 )}
-                <div className="mt-24 p-6 max-w-7xl mx-auto">
+                <div className="mt-16 md:p-6 py-6 px-2 max-w-7xl mx-auto">
 
                     {/* Titre */}
                     <h1 className="text-2xl font-bold mb-8">Détails du produit</h1>
@@ -165,7 +176,7 @@ const DetailProduct = ({product}) => {
                         </div>
 
                         {/* Image principale */}
-                        <div className="flex items-center gap-4 bg-gray-100 p-4 rounded-lg">
+                        <div className="flex items-center md:gap-4 bg-gray-100 p-4 rounded-lg">
                             <FiChevronLeft
                                 className="text-3xl cursor-pointer hover:text-orange-500 transition-colors"
                                 onClick={handlePrev}
@@ -173,7 +184,7 @@ const DetailProduct = ({product}) => {
                             <img
                                 src={images[currentIndex]}
                                 alt="Produit"
-                                className="w-[400px] h-[400px] object-cover rounded-lg"
+                                className="md:w-[400px] w-[300px] md:h-[400px] h-[300px] object-cover rounded-lg"
                             />
                             <FiChevronRight
                                 className="text-3xl cursor-pointer hover:text-orange-500 transition-colors"
@@ -182,15 +193,15 @@ const DetailProduct = ({product}) => {
                         </div>
 
                         {/* Infos produit */}
-                        <div className="flex-1">
+                        <div className="flex-1 md:text-inherit text-xs">
                             <h2 className="text-xl font-semibold mb-2">
                                 Nom du produit <span className="text-gray-500">— <i>Nom de la boutique</i></span>
                             </h2>
                             <p className="text-gray-700 mb-4">
                                 Ceci est une description détaillée du produit. Elle met en avant ses caractéristiques principales et ce qui le rend unique.
                             </p>
-                            <p className="text-lg font-bold mb-2">Ville : <span className="text-gray-800">Douala</span></p>
-                            <p className="text-lg font-bold text-orange-600 mb-4">Prix : 1000 FCFA</p>
+                            <p className="md:text-lg text-sm font-bold mb-2">Ville : <span className="text-gray-800">Douala</span></p>
+                            <p className="md:text-lg text-sm font-bold text-orange-600 mb-4">Prix : 1000 FCFA</p>
 
                             {/* Notes */}
                             <div className="flex items-center gap-2 mb-4">
@@ -231,15 +242,17 @@ const DetailProduct = ({product}) => {
                     </div>
 
                     {/* Produits similaires et avis */}
-                    <h2 className="mt-20 text-3xl font-extrabold">Produits similaires, avis et recommandations</h2>
-                    <div className="flex mt-10 gap-6">
+                    <h2 className="mt-20 md:text-3xl font-extrabold">Produits similaires, avis et recommandations</h2>
+                    <div className="flex md:flex-row flex-col-reverse mt-10 md:gap-6">
 
                         {/* Produits similaires */}
-                        <div className="w-1/2 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+                        
+                        <div className="md:w-1/2 md:p-4 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-1">
+                            
                             {similarProduct.map((item) => (
                                 <div key={item.id} className="p-4 border rounded-lg  transition cursor-pointer">
                                     <div
-                                        className="bg-cover bg-center rounded-lg h-40"
+                                        className="bg-cover bg-center rounded-lg h-32"
                                         style={{ backgroundImage: `url(${item.imageUrl})` }}
                                     ></div>
                                     <p className="mt-4 font-bold text-lg">{item.name}</p>
@@ -250,7 +263,7 @@ const DetailProduct = ({product}) => {
                         </div>
 
                         {/* Avis */}
-                        <div className="w-1/2 bg-gray-100 rounded-lg p-6">
+                        <div className="md:w-1/2 bg-gray-100 rounded-lg md:p-6 p-1">
                             <h1 className="font-extrabold text-2xl mb-4">Notes et Commentaires</h1>
                             <div className="flex justify-between items-center mb-4">
                                 <button className="px-3 py-1  border-black font-bold border-2  rounded-[15px] hover:bg-orange-500 hover:text-white transition">Tous</button>
@@ -288,7 +301,7 @@ const DetailProduct = ({product}) => {
                     </div>
 
                     {showRubanOrder && (
-                        <div className='mt-20 bg-white shadow-md p-6 rounded-lg w-[50%] index-1000 fixed right-0 top-0'>
+                        <div className='mt-20 bg-white shadow-md p-6 rounded-lg md:w-[50%] w-[100%] index-1000 fixed right-0 top-0'>
                             <FiX className='text-2xl cursor-pointer bg-slate-300 absolute top-2 right-2'
                                 onClick={() => setShowRubanOrder(false)}
                             />
@@ -344,7 +357,7 @@ const DetailProduct = ({product}) => {
                             <div>
                                 <button className='bg-orange-500 text-white px-6 py-2 rounded-lg mt-4 hover:bg-orange-600 transition w-full '
                                     onClick={() => {
-                                        setNumber(number + 1);
+                                        // setNumber(number + 1);
                                         setAlertAddCart(true);
                                         setShowRubanOrder(false);
                                          handleAddToCart();

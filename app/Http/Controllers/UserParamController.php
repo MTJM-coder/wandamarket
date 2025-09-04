@@ -24,7 +24,7 @@ public function update(Request $request){
         'prenom' => 'string|max:255|nullable',
         'email' => 'string|email|max:255|unique:users,email,'.$user->id,
         'telephone' => 'string|max:255|unique:users,telephone,'.$user->id,
-        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable',
+         'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048|nullable',
         'ville' => 'string|max:255|nullable',
         'quartier' => 'string|max:255|nullable',
     ]);

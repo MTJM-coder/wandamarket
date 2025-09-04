@@ -16,12 +16,12 @@ const AuthenticatedLayout = ({ user = {}, title = '', children }) => {
       <AuthenticatedHeader user={user} />
 
       {/* Bouton menu mobile */}
-      <button 
+      {/* <button 
   onClick={() => setMobileMenuOpen(true)}
   className="md:hidden fixed left-4 top-4 z-50 bg-[#071726] text-white p-2 rounded-lg shadow-lg"
 >
   <FiMenu size={24} />
-</button>
+</button> */}
 
       {/* Sidebar desktop */}
       <div className="hidden md:block">

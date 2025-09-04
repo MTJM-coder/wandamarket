@@ -183,7 +183,7 @@ const Sidebar = () => {
 
       {/* Déconnexion */}
       <div className="absolute bottom-0 w-full p-4 border-t border-[#0d2a40]">
-        <Link
+        {/* <Link
           href="/logout"
           method="post"
           as="button"
@@ -191,7 +191,7 @@ const Sidebar = () => {
         >
           <FiLogOut className="mr-3" />
           <span>Déconnexion</span>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

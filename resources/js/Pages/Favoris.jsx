@@ -5,6 +5,7 @@ import {
   FiChevronLeft, FiShare2, FiFilter 
 } from 'react-icons/fi';
 import AuthenticatedLayout from './AuthenticatedLayout';
+import SideBar2 from '@/Layouts/SideBar2';
 
 const Favoris = () => {
   // Données fictives pour les produits favoris
@@ -16,7 +17,7 @@ const Favoris = () => {
       prix: 25000,
       prix_reduit: 22000,
       reduction: 12,
-      image: "/images/produits/robe-wax.jpg",
+      image: "/dressGirl.png",
       en_stock: true,
       note: 4.5,
       avis: 24
@@ -26,7 +27,7 @@ const Favoris = () => {
       nom: "Sac à Main Africain",
       boutique: "Artisanat Ivoirien",
       prix: 18000,
-      image: "/images/produits/sac-africain.jpg",
+      image: "/wach.png",
       en_stock: false,
       note: 4.2,
       avis: 18
@@ -36,7 +37,7 @@ const Favoris = () => {
       nom: "Statue Baoulé",
       boutique: "Art Traditionnel",
       prix: 35000,
-      image: "/images/produits/statue-baoule.jpg",
+      image: "/sac1.webp",
       en_stock: true,
       note: 4.8,
       avis: 32
@@ -70,9 +71,12 @@ const Favoris = () => {
     return 0; // Par défaut, ordre d'ajout
   });
 
+  const [activeTab,setActiveTab]=useState("Favoris")
+
   return (
-    <AuthenticatedLayout>
-    <div className="min-h-screen bg-gray-50">
+    <div>
+      <SideBar2 activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen bg-gray-50 ml-24">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
@@ -246,7 +250,7 @@ const Favoris = () => {
         )}
       </div>
     </div>
-    </AuthenticatedLayout>
+    </div>
   );
 };
 

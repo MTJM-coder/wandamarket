@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FiStar, FiMapPin, FiShoppingCart, FiHeart } from 'react-icons/fi';
+import { FaStore } from 'react-icons/fa';
+import { FiStar, FiMapPin, FiShoppingCart, FiHeart} from 'react-icons/fi';
 
 const Products = ({ filters, searchTerm }) => {
+    const showMore =(id)=>{
+        
+        window.location.href="/detail-product"
+    }
     const [likedProduct, setLikedProduct] = useState([]);
 
     const toggleLike = (id) => {
@@ -99,7 +104,7 @@ const Products = ({ filters, searchTerm }) => {
             category: 'Electronique',
             price: '500 000 FCFA',
             oldPrice: '600 000 FCFA',
-            description: 'Ordinateur portable avec 16 Go de RAM et 512 Go de SSD',
+            description: 'Ordinateur portable avec 16 Go de RAM et 512 Go de SSD ',
             seller: 'Tech World',
             location: 'Yaoundé',
             rating: 4.6,
@@ -111,8 +116,8 @@ const Products = ({ filters, searchTerm }) => {
             category: 'Mode',
             price: '120 000 FCFA',
             oldPrice: '150 000 FCFA',
-            description:
-                'Sac à dos en cuir véritable pour les étudiants et professionnels',
+            // description:
+                // 'Sac à dos en cuir véritable pour les étudiants et professionnels',
             seller: 'Bag Store',
             location: 'Douala',
             rating: 4.1,
@@ -154,42 +159,49 @@ const Products = ({ filters, searchTerm }) => {
     });
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
             {filteredProducts.map((product) => {
                 const isLiked = likedProduct.includes(product.id);
                 return (
                     <div
-                        className="bg-white rounded shadow-md p-3 hover:shadow-lg transition-shadow duration-300"
+                        className="bg-white rounded shadow-sm p-3 hover:shadow-lg transition-shadow duration-300"
                         key={product.id}
+                        onClick={()=>showMore(product.id)}
                     >
                         <div
-                            className="relative bg-cover bg-center h-64 w-full rounded-lg mb-4 cursor-pointer"
+                            className="relative bg-cover bg-center h-24 w-full rounded-lg mb-4 cursor-pointer"
                             style={{ backgroundImage: `url(${product.imageUrl})` }}
                         >
                             <FiHeart
-                                onClick={() => toggleLike(product.id)}
+                            
+                                onClick={(e) =>{
+                                    e.stopPropagation();
+                                    toggleLike(product.id);
+                                    }
+                                }
                                 className={`absolute top-2 right-2 text-bold p-2 rounded-full text-3xl shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 ${isLiked ? 'bg-orange-500 text-lime-50' : 'bg-white'
                                     }`}
                             />
                         </div>
-                        <div className="p-2 flex items-center justify-between">
-                            <h2 className="text-lg font-semibold">{product.name}</h2>
-                            <div className="flex items-center text-sm text-gray-700">
+                        <div className=" flex items-center justify-between">
+                            <h2 className="md:text-md  text-sm font-semibold">{product.name}</h2>
+                            {/* <div className="flex items-center text-sm text-gray-700">
                                 <FiStar className="text-orange-500 mr-1" />
                                 {product.rating}/5
-                            </div>
+                            </div> */}
                         </div>
-                        <p className="text-gray-500 w-full h-7 overflow-hidden">
+                        <p className={`text-gray-500 w-full  overflow-hidden text-[10px] ${product.description?"h-7":""}`}>
                             {product.description}
                         </p>
-                        <p className="text-2xl font-bold">{product.price}</p>
-                        <p className="line-through text-red-500">{product.oldPrice}</p>
-                        <p className="font-serif underline mt-2">
+                        <p className="md:text-md text-sm font-bold">{product.price}</p>
+                        <p className="line-through text-[10px] text-red-500">{product.oldPrice}</p>
+                        <p className="font-serif text-xs  mt-2 text-gray-300 flex items-center gap-1">
+                            <FaStore/>
                             <i>{product.seller}</i>
                         </p>
-                        <p className="mt-1">
+                        {/* <p className="mt-1">
                             <FiMapPin className="inline" /> {product.location}
-                        </p>
+                        </p> */}
                         {/* <div className="flex justify-between items-center mt-2">
                             <button className="border-2 p-3 rounded-2xl bg-orange-400 hover:bg-transparent transition-all duration-500 ease-in-out">
                                 <FiShoppingCart className="inline mr-1" />

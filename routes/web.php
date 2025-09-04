@@ -16,6 +16,7 @@ use App\Models\visite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\dashboardController;
+use PhpParser\Node\Stmt\Return_;
 
 use function Pest\Laravel\get;
 
@@ -30,6 +31,13 @@ Route::get('/', function () {
     return Inertia::render('Welcome', []);
 })->name('connexion');
 
+Route::get('/seller/dashboard',function(){
+    Return Inertia::render('SellerDashboard', []);
+});
+Route::get('/seller/clients', function () {
+    return Inertia::render('SellerClient', []);
+})->name('connexion');
+Route::get('/seller/produits', [BoutiqueController::class, 'sellerProduct'] );
 Route::get('/buyer/dashboard', function () {
     return Inertia::render('BuyerDashboard', []);
 })->name('connexion');
@@ -40,14 +48,21 @@ Route::get('/buyer/order/detail', function () {
     return Inertia::render('DetailCommande', []);
 })->name('connexion');
 
+Route::get('/buyer/order/avis', function () {
+    return Inertia::render('AvisOrder', []);
+})->name('connexion');
+
 Route::get('/product', function () {
     return Inertia::render('ProductPage', []);
 })->name('connexion');
 
 Route::get('/detail-product', function () {
-    return Inertia::render('Panier', []);
+    return Inertia::render('DetailProduct', []);
 })->name('connexion');
 
+Route::get('/panier',function(){
+    return Inertia::render('Panier');
+});
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
@@ -55,6 +70,13 @@ Route::get('/connexion', function () {
     return Inertia::render('Connexion', []);
 })->name('connexion');
 
+Route::get('/seller/stats', function () {
+    return Inertia::render('sellerStatistique', []);
+})->name('connexion');
+
+Route::get('/seller/settings',function(){
+    return Inertia::render('SellerSettings',[]);
+});
 Route::post('/login', [loginController::class, 'login']);
 
 Route::get('/inscription', function () {
@@ -79,6 +101,9 @@ Route::get('/seller-register', function () {
 })->name('connexion');
 
 Route::get('/boutique', [BoutiqueController::class,'boutique'])->name('connexion');
+Route::get('/seller/order', function () {
+    return Inertia::render('sellerOrder', []);
+})->name('connexion');
 
 Route::get('/parametre', [UserParamController::class,'parametre']);
 Route::put('/parametre/update', [UserParamController::class,'update']);
@@ -108,3 +133,31 @@ Route::get('/favoirs', function () {
     ]);
 })->name('connexion');
 
+// admin
+Route::get('/admin/dashboard', function () {
+    return Inertia::render('AdminDashboard', []);
+})->name('connexion');
+
+Route::get('/admin/sellers', function () {
+    return Inertia::render('AdminSeller', []);
+})->name('connexion');
+Route::get('/admin/clients',function(){
+    return Inertia::render('AdminClient',[]);
+});
+
+Route::get('/admin/orders',function(){
+    return Inertia::render('AdminOrder',[]);
+});
+
+Route::get('admin/products',function(){
+    return Inertia::render('AdminProduct',[]);
+});
+Route::get('/admin/payments',function(){
+    return Inertia::render('abonnement',[]);
+});
+Route::get('/admin/settings',function(){
+    return Inertia::render('AdminParametre',[]);
+});
+Route::get('/admin/admins',function(){
+    return Inertia::render('Admin',[]);
+});

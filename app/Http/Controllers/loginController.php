@@ -35,7 +35,7 @@ class loginController extends Controller
             Auth::login($user);
         }
 
-        return redirect('/produit')->with('status', 'Connexion réussie.');
+        return redirect('/buyer/dashboard')->with('status', 'Connexion réussie.');
     }
 
     // reset password step 1

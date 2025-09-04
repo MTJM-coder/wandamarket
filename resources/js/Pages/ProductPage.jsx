@@ -6,6 +6,7 @@ import Products from '@/Layouts/Products'
 import { useState } from 'react';
 import Footer from '@/Layouts/footer'
 const PoductPage = () => {
+
   const [filters, setFilters] = useState({
     city: [],
     category: [],
@@ -14,6 +15,8 @@ const PoductPage = () => {
     rating: null
   });
   const [searchTerm, setSearchTerm] = useState("")
+  const [showFilter,setShowFilter]=useState(false)
+  
 
   return (
     <>
@@ -23,11 +26,13 @@ const PoductPage = () => {
           setSearchTerm={setSearchTerm}
           filters={filters}
           setFilters={setFilters}
+          showFilter={showFilter}
+          setShowFilter={setShowFilter}
         />
       </div>
       <div className="mt-32 px-4 flex flex-col lg:flex-row gap-6">
   {/* Sidebar */}
-  <div className="lg:w-1/4 w-full md-display-hidden">
+  <div className={`lg:w-1/4 w-full md-display-hidden  ${showFilter?  "inline-block":"hidden" } md:inline-block`}>
     <FilterSideBar filters={filters} setFilters={setFilters} />
   </div>
 
