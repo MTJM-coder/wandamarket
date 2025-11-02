@@ -7,6 +7,7 @@ use App\UserRules;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Pest\Mutate\Event\Events\Test\Outcome\Uncovered;
@@ -17,6 +18,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable,HasApiTokens;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -33,9 +35,10 @@ class User extends Authenticatable
         'ville',
         'quartier',
         'image',
+        'statut',
         'slug',
     ];
-
+protected $dates=['deleted_at'];
     protected $casts= [
         'role'=>UserRules::class,
     ];
@@ -91,9 +94,18 @@ class User extends Authenticatable
        return  $this->hasMany(Message::class);
     }
     public function boutique(){
-        return $this->belongsTo(Boutique::class);
+        return $this->hasOne(Boutique::class);
     }
     public function favoris(){
         return $this->hasMany(favoris::class);
     }
+    public function abonnement(){
+        return $this->hasMany(Abonnement::class);
+    }
+    public function assistants()
+    {
+        return $this->hasMany(assistants::class);
+    }
+    
+
 }

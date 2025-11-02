@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import NavBar from '@/Layouts/Navbar'
 import DropdownMenu from '@/Layouts/DropDownMenu'
 import FilterSideBar from '@/Layouts/FilterSideBar'
@@ -6,7 +6,11 @@ import Products from '@/Layouts/Products'
 import { useState } from 'react';
 import Footer from '@/Layouts/footer'
 import { FaStore } from 'react-icons/fa'
-const HomePage = () => {
+import { usePage } from '@inertiajs/react'
+const HomePage = (props) => {
+
+  // const {props}=usePage()
+  // const user=props.user
 
   const [filters, setFilters] = useState({
     city: [],
@@ -18,6 +22,7 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [showFilter,setShowFilter]=useState(false)
   const [activeTab,setActiveTab]=useState('Accueil')
+  const produits=props.produits
 
   return (
     <>
@@ -31,6 +36,8 @@ const HomePage = () => {
           setShowFilter={setShowFilter}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          auth={props.auth}
+
         />
       </div>
       <div className="mt-32 px-4 flex flex-col lg:flex-row gap-6">
@@ -41,15 +48,15 @@ const HomePage = () => {
 
   {/* Produits */}
   <div className="lg:w-3/4 w-full">
-    <Products filters={filters} searchTerm={searchTerm} />
+    <Products productList={produits} filters={filters} searchTerm={searchTerm} />
   </div>
 
 </div>
-    <Footer></Footer>
+   
 
     
 
-          <section className="py-16 bg-[#071726] text-white">
+          <section className="py-16 bg-[#071726] text-white mt-10">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl font-bold mb-6">Vous êtes artisan ou commerçant ?</h2>
               <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
@@ -66,7 +73,7 @@ const HomePage = () => {
         
 
         {/* Pied de page */}
-       {/* <footer className="bg-gray-900 text-gray-300 py-12"></footer> */}
+        <Footer></Footer>
       
     </>
   );

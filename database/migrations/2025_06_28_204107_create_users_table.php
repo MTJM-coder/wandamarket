@@ -19,9 +19,10 @@ return new class extends Migration
             $table->string('email',191)->unique();
             $table->string('telephone')->nullable();
             $table->string('mot_de_passe');
-            $table->enum('role', ['client', 'vendeur', 'admin'])->default('client');
+            $table->enum('role', ['client', 'vendeur', 'admin','super_admin','assistant'])->default('client');
             $table->string('ville')->nullable();
             $table->string('quartier')->nullable();
+            $table->string('statut',['actif','Inactif'])->default('actif');
             $table->string('image')->nullable();
             $table->rememberToken();
             $table->string('slug',191)->unique()->nullable(); // Slug pour l'URL

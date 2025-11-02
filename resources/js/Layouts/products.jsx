@@ -1,11 +1,17 @@
+import produits from '@/Pages/produits';
+import { router, usePage } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
 import { FaMapPin, FaStore } from 'react-icons/fa';
-import { FiStar, FiMapPin, FiShoppingCart, FiHeart} from 'react-icons/fi';
+import { FiStar, FiMapPin, FiShoppingCart, FiHeart, FiShoppingBag} from 'react-icons/fi';
 
-const Products = ({ filters, searchTerm }) => {
+const Products = ({ filters, searchTerm ,productList }) => {
+    console.log('venan de produc '+ productList.length)
+    console.log(productList)
+    const {props}=usePage();
+    const auth=props.auth
     const showMore =(id)=>{
         
-        window.location.href="/detail-product"
+        window.location.href=`/detail-product/${id}`
     }
     const [likedProduct, setLikedProduct] = useState([]);
 
@@ -13,6 +19,10 @@ const Products = ({ filters, searchTerm }) => {
         setLikedProduct((prev) =>
             prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
         );
+        if(auth.user){
+            router.get(`/favoris/${id}/add`)
+        }
+        
     };
 
     useEffect(() => {
@@ -24,141 +34,45 @@ const Products = ({ filters, searchTerm }) => {
         localStorage.setItem('likedProduct', JSON.stringify(likedProduct));
     }, [likedProduct]);
 
-    const productList = [
-        {
-            id: 1,
-            name: 'Sac à main',
-            category: 'Mode',
-            price: '100 000 FCFA',
-            oldPrice: '120 000 FCFA',
-            description:
-                'Sac à main en cuir véritable léger et facilement portable pour tout vos déplacements',
-            seller: 'Leon Marchand',
-            location: 'Douala',
-            rating: 2.8,
-            imageUrl: '/sac1.webp',
-        },
-        {
-            id: 2,
-            name: 'Chaussures de sortie',
-            category: 'Mode',
-            price: '45 000 FCFA',
-            oldPrice: '50 000 FCFA',
-            description: 'Chaussures élégantes pour les sorties',
-            seller: 'Marie le pan',
-            location: 'Yaoundé',
-            rating: 4.5,
-            imageUrl: '/shoes.png',
-        },
-        {
-            id: 3,
-            name: 'Montre de luxe',
-            category: 'Accessoires',
-            price: '75 000 FCFA',
-            oldPrice: '90 000 FCFA',
-            description: 'Montre de luxe avec bracelet en cuir',
-            seller: 'Maguida',
-            location: 'Buea',
-            rating: 4.0,
-            imageUrl: '/wach.png',
-        },
-        {
-            id: 4,
-            name: 'Costume homme',
-            category: 'Mode',
-            price: '150 000 FCFA',
-            oldPrice: '180 000 FCFA',
-            description: 'Costume élégant pour les occasions spéciales',
-            seller: 'Bemji Shop',
-            location: 'Douala',
-            rating: 4.2,
-            imageUrl: '/dressMen.png',
-        },
-        {
-            id: 5,
-            name: 'Robe pagne elegante',
-            category: 'Mode',
-            price: '80 000 FCFA',
-            oldPrice: '100 000 FCFA',
-            description: 'Robe en pagne pour les occasions spéciales',
-            seller: 'Boutique du nouveau',
-            location: 'Yaoundé',
-            rating: 4.3,
-            imageUrl: '/dressGirl.png',
-        },
-        {
-            id: 6,
-            name: 'Iphone 14 Pro',
-            category: 'Electronique',
-            price: '1 200 000 FCFA',
-            oldPrice: '1 500 000 FCFA',
-            description: 'Iphone 14 Pro avec 256 Go de stockage',
-            seller: 'Best Choice Store',
-            location: 'Douala',
-            rating: 4.8,
-            imageUrl: '/phone.png',
-        },
-        {
-            id: 7,
-            name: 'Ordinateur portable',
-            category: 'Electronique',
-            price: '500 000 FCFA',
-            oldPrice: '600 000 FCFA',
-            description: 'Ordinateur portable avec 16 Go de RAM et 512 Go de SSD ',
-            seller: 'Tech World',
-            location: 'Yaoundé',
-            rating: 4.6,
-            imageUrl: '/machine.png',
-        },
-        {
-            id: 8,
-            name: 'Sac à dos en cuir',
-            category: 'Mode',
-            price: '120 000 FCFA',
-            oldPrice: '150 000 FCFA',
-            // description:
-                // 'Sac à dos en cuir véritable pour les étudiants et professionnels',
-            seller: 'Bag Store',
-            location: 'Douala',
-            rating: 4.1,
-            imageUrl: '/sac2.webp',
-        },
-    ];
+
 
     const filteredProducts = productList.filter((product) => {
         const matchCity =
             filters.city.length === 0 ||
             filters.city.includes("Toutes les villes") ||
-            filters.city.includes(product.location);
+            filters.city.includes(product.boutique.ville);
         const matchCategory =
             filters.category.length === 0 ||
             filters.category.includes("Toutes catégories") ||
-            filters.category.includes(product.category);
-        const priceValue = parseInt(product.price.replace(/\D/g, ''));
-        const matchPrice =
-            priceValue >= filters.minPrice && priceValue <= filters.maxPrice;
+            filters.category.includes(product.categorie.nom);
+        const priceValue = parseInt(product.prix.replace(/\D/g, ''));
+        // const matchPrice =
+        //     priceValue >= filters.minPrice && priceValue <= filters.maxPrice;
         const matchRating = filters.rating
             ? product.rating >= filters.rating
             : true;
         const matchSearch = searchTerm
             ? (
-                product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (product.category && product.category.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                product.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (product.categorie.nom && product.categorie.nom.toLowerCase().includes(searchTerm.toLowerCase())) ||
                 product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                product.seller.toLowerCase().includes(searchTerm.toLowerCase())
+                product.boutique.user.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                 product.boutique.nom.toLowerCase().includes(searchTerm.toLowerCase())
             )
             : true;
 
         return (
             matchCity &&
             matchCategory &&
-            matchPrice &&
+            // matchPrice &&
             matchRating &&
             matchSearch
         );
     });
-
+console.log(filteredProducts)
     return (
+        <>
+        {filteredProducts.length>0 ? 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
             {filteredProducts.map((product) => {
                 const isLiked = likedProduct.includes(product.id);
@@ -170,7 +84,7 @@ const Products = ({ filters, searchTerm }) => {
                     >
                         <div
                             className="relative bg-cover bg-center h-24 w-full rounded-lg mb-4 cursor-pointer"
-                            style={{ backgroundImage: `url(${product.imageUrl})` }}
+                            style={{ backgroundImage: `url(/storage/${product.images[0].url})` }}
                         >
                             <FiHeart
                             
@@ -184,7 +98,7 @@ const Products = ({ filters, searchTerm }) => {
                             />
                         </div>
                         <div className=" flex items-center justify-between">
-                            <h2 className="md:text-md  text-sm font-semibold">{product.name}</h2>
+                            <h2 className="md:text-md  text-sm font-semibold">{product.nom}</h2>
                             {/* <div className="flex items-center text-sm text-gray-700">
                                 <FiStar className="text-orange-500 mr-1" />
                                 {product.rating}/5
@@ -193,11 +107,11 @@ const Products = ({ filters, searchTerm }) => {
                         <p className={`text-gray-500 w-full  overflow-hidden text-[10px] ${product.description?"h-7":""}`}>
                             {product.description}
                         </p>
-                        <p className="md:text-md text-sm font-bold">{product.price}</p>
-                        <p className="line-through text-[10px] text-red-500">{product.oldPrice}</p>
+                        <p className="md:text-md text-sm font-bold">{product.prix} FCFA</p>
+                        <p className="line-through text-[10px] text-red-500">{product.prix_reduit?product.prix_reduit+'FCFA':''} </p>
                         <p className="font-serif text-xs  mt-2 text-gray-300 flex items-center gap-1">
                             <FiMapPin/>
-                            <i>{product.location}</i>
+                            <i>{product?.boutique?.user?.ville}</i>
                         </p>
                         {/* <p className="mt-1">
                             <FiMapPin className="inline" /> {product.location}
@@ -214,7 +128,18 @@ const Products = ({ filters, searchTerm }) => {
                     </div>
                 );
             })}
+        </div>:
+        <div className='flex items-center text-gray-300 justify-center flex-col text-center'>
+            <div className='h-15 w-15 text-center bg-gray-200  my-5 p-6 rounded-full'>
+                <FiShoppingBag className='text-6xl'/>
+            </div>
+            <div className='font-bold text-2xl'>
+                Aucun article disponible 😓
+            </div>
+
         </div>
+        }
+        </>
     );
 };
 

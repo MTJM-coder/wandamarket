@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AvisBoutique;
 use App\Models\AvisProduit;
+use App\Models\Boutique;
 use App\Models\Commande;
 use App\Models\favoris;
+use App\Models\Produit;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -15,6 +17,43 @@ use Inertia\Inertia;
 class dashboardController extends Controller
 {
     //
+    public function getSellerDashboard(){
+        $user=Auth::user();
+        $boutique=Boutique::where('user_id',$user->id)->first();
+        if (!$boutique) {
+    return Inertia::render('SellerDashboard', [
+        'message' => 'Aucune boutique associée à cet utilisateur.'
+    ]);
+}
+        $commande=Commande::with('commandeProduits.produit','user')
+                            ->where('boutique_id',$boutique->id)
+                            ->orderBy('created_at','desc')->get();
+        $revenuTotal=Commande::where('boutique_id',$boutique->id)
+                            ->sum('montant_total');
+        $revenuTotal = number_format($revenuTotal, 0, ',', ' ') . ' FCFA';
+
+        $revenuJour = Commande::where('boutique_id', $boutique->id)
+        ->whereDate('created_at', Carbon::today())
+        ->sum('montant_total');
+    $revenuJour = number_format($revenuJour, 0, ',', ' ') . ' FCFA';
+
+    $commandeJour=Commande::where('boutique_id',$boutique->id)
+                        ->whereDate('created_at',Carbon::today())
+                        ->get();
+         
+
+        $produits=Produit::where('boutique_id',$boutique->id)->get();
+
+
+        return Inertia::render('SellerDashboard',[
+            'revenuTotal'=>$revenuTotal,
+            'commande'=>$commande,
+            'produits'=>$produits,
+            'revenuJour'=>$revenuJour,
+            'commandeJour'=>$commandeJour
+        ]);
+    }
+
     public function getDashboard(){
         if(Auth::check()){
             $user=Auth::user();
@@ -66,5 +105,13 @@ class dashboardController extends Controller
             'commandeRecente'=>$commande
         ]);
         }
+    }
+
+    public function detailOrders($id){
+        $orders=Commande::with('commandeProduits.produit.images','user','boutique')->find($id);
+        
+        return Inertia::render('SellerDetailOrder',[
+            'orders'=>$orders
+        ]);
     }
 }

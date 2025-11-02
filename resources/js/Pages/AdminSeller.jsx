@@ -3,6 +3,7 @@ import AdminNavBar from '@/Layouts/AdminNavBar'
 import { useState } from 'react';
 import { FiEdit, FiTrash2, FiBarChart, FiDollarSign, FiPlus, FiShoppingBag, FiMoreHorizontal, FiUser, FiMapPin,FiShield,FiShieldOff,FiUsers,FiBox,FiSearch,FiUserCheck,FiUserX,FiMail,FiCalendar,FiSettings,FiPhone } from 'react-icons/fi';
 import { FaUserTie } from 'react-icons/fa';
+import { usePage } from '@inertiajs/react';
 
 const AdminSeller = () => {
    
@@ -93,50 +94,13 @@ const AdminSeller = () => {
             imageUrl: "/dressGirl.png",
         },
     ];
-    const vendeurs = [
-  {
-    id: 1,
-    nom: "Jean Dupont",
-    email: "jean.dupont@example.com",
-    telephone: "690123456",
-    ville: "Douala",
-    quartier: "Bonapriso",
-    nomBoutique: "Boutique Jean Mode",
-    nombreProduits: 120,
-    etat: "actif",
-    created_at: "2025-01-10",
-    updated_at: "2025-08-15",
-  },
-  {
-    id: 2,
-    nom: "Marie Nkou",
-    email: "marie.nkou@example.com",
-    telephone: "677987654",
-    ville: "Yaoundé",
-    quartier: "Biyem-Assi",
-    nomBoutique: "Marie Style",
-    nombreProduits: 85,
-    etat: "inactif",
-    created_at: "2024-11-02",
-    updated_at: "2025-05-20",
-  },
-  {
-    id: 3,
-    nom: "Ali Mbarga",
-    email: "ali.mbarga@example.com",
-    telephone: "674321987",
-    ville: "Bafoussam",
-    quartier: "Banengo",
-    nomBoutique: "Ali Electronics",
-    nombreProduits: 200,
-    etat: "actif",
-    created_at: "2025-02-05",
-    updated_at: "2025-08-10",
-  },
-];
- const vendeursInactifs=vendeurs.filter(vendeur=>vendeur.etat=="inactif").length
+    const {props}=usePage()
+    const flash=props
+    const vendeurs = props.vendeurs
+  
+ const vendeursInactifs=vendeurs.filter(vendeur=>vendeur.statut=="inactif").length
 
- const vendeursActifs=vendeurs.filter(vendeur=>vendeur.etat=="actif").length
+ const vendeursActifs=vendeurs.filter(vendeur=>vendeur.statut=="actif").length
 
 
     return (
@@ -229,19 +193,19 @@ const AdminSeller = () => {
                                             </p>
                                         </td>
                                         <td className="space-y-1 px-2 py-4 text-left">
-                                            <p className={`text-sm px-5  rounded w-max ${vendeur.etat === "inactif" ? "bg-red-200 text-red-700" : "bg-green-300 text-green-700"} `}>{vendeur.etat}</p>
+                                            <p className={`text-sm px-5  rounded w-max ${vendeur.statut === "inactif" ? "bg-red-200 text-red-700" : "bg-green-300 text-green-700"} `}>{vendeur.statut}</p>
                                         </td>
                                         <td className="space-y-1 px-2 py-4 text-left">
                                             <p className="text-xs">
-                                                <span className="font-bold">Inscris: </span><span>{vendeur.created_at}</span>
+                                                <span className="font-bold">Inscris: </span><span>{new Date(vendeur.created_at).toLocaleDateString('fr-FR')}</span>
                                             </p>
                                             <p className="text-xs">
-                                                <span className="font-bold">Modifié: </span><span>{vendeur.updated_at}</span>
+                                                <span className="font-bold">Modifié: </span><span>{new Date(vendeur.updated_at).toLocaleDateString('fr-FR')}</span>
                                             </p>
                                         </td>
                                         <td className="px-2 py-4 text-left">
                                             <div className="flex gap-3 md:gap-5">
-                                                {vendeur.etat === "actif" ? (
+                                                {vendeur.statu === "actif" ? (
                                                     <FiShieldOff className="hover:text-orange-500 cursor-pointer" />
                                                 ) : (
                                                     <FiShield className="hover:text-orange-500 cursor-pointer" />
@@ -303,7 +267,7 @@ const AdminSeller = () => {
 
                             {/* Actions */}
                             <div className="p-4 flex flex-wrap justify-end gap-3 border-t">
-                                {commande.etat === "En attente de confirmation" && (
+                                {commande.statut === "En attente de confirmation" && (
                                     <>
                                         <button className="px-4 py-2 bg-green-100 text-green-700 rounded-full hover:bg-green-200">
                                             Confirmer
@@ -313,7 +277,7 @@ const AdminSeller = () => {
                                         </button>
                                     </>
                                 )}
-                                {commande.etat === "Livrée" ? (
+                                {commande.statut === "Livrée" ? (
                                     <span className="px-4 py-2 text-green-600 font-medium">
                                         ✅ Commande livrée
                                     </span>

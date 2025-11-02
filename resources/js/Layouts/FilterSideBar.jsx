@@ -50,6 +50,7 @@ const FilterSideBar = ({ filters, setFilters }) => {
             {["Électronique", "Vêtements", "Accessoires"].map((cat) => (
               <li key={cat}>
                 <input
+                 
                   type="checkbox"
                   checked={filters.category.includes(cat)}
                   onChange={() => handleCategoryChange(cat)}
@@ -66,7 +67,7 @@ const FilterSideBar = ({ filters, setFilters }) => {
           <input
             type="range"
             min="0"
-            max="1000000"
+            max="1000000000"
             value={filters.maxPrice}
             onChange={handlePriceChange}
             className="w-full"

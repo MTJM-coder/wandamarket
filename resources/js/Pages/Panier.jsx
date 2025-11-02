@@ -1,13 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import NavBar2 from '@/Layouts/NavBar2';
-import { FiShoppingCart, FiTrash } from 'react-icons/fi';
+import { FiCreditCard, FiShoppingCart, FiTrash, FiShield } from 'react-icons/fi';
+import { router, usePage } from '@inertiajs/react';
 
 const Panier = () => {
+  const {props}=usePage()
+  const auth=props.auth
   // Récupérer le panier depuis localStorage
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
+
+  const handleCommand = () => {
+    const orderData = {
+      produits: cart.map(item => ({
+        produit_id: item.id,
+        boutique: item.boutique,
+        quantity: item.quantity,
+        price: item.price,
+        boutique_id:item.boutique_id
+      })),
+      total: totalAPayer,
+      clientName: auth?.user?.nom || '',
+      clientPhone: auth?.user?.telephone || '',
+      clientAddress: auth?.user?.quartier || '',
+      clientCity: auth?.user?.ville || ''
+    };
+    router.post('/buyer/valider/panier', orderData,{
+      onSuccess:()=>{
+        localStorage.removeItem('cart');
+      setCart([]);
+      }
+    })
+
+   
+
+
+  }
 
   // Sauvegarder le panier à chaque modification
   useEffect(() => {
@@ -47,7 +77,7 @@ const Panier = () => {
         <NavBar2 />
       </div>
       <div className="flex flex-col lg:flex-row mt-24 px-4 lg:px-10 gap-6">
-        
+
         {/* Colonne gauche : produits */}
         <div className="w-full lg:w-[70%] max-w-4xl md:mb-0 mb-40 mr-4">
           <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md px-4 md:flex md:justify-between md:shadow-sm">
@@ -62,11 +92,11 @@ const Panier = () => {
             cart.map((item, index) => (
               <div key={index} className="bg-white rounded-lg p-1 md:p-4 mb-4 shadow-sm">
                 <h2 className="text-lg font-semibold mb-3">
-                  Boutique du vêtement de Mboppi
+                  {item.boutique}
                 </h2>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-gray-100 p-4 rounded-lg">
-                  
+
                   {/* Image + infos produit */}
                   <div className="flex items-center gap-4 w-full sm:w-auto">
                     <img
@@ -77,7 +107,8 @@ const Panier = () => {
                     <div>
                       <p className="font-medium">{item.name}</p>
                       <p className="text-gray-500 text-sm">
-                        Couleur : Rouge / Taille : M
+                        {item.couleur ?? item.couleur}
+                        {item.taille ?? item.taille}
                       </p>
                       <p className="text-orange-500 font-semibold">
                         Prix unitaire : {item.price} Fcfa
@@ -119,7 +150,7 @@ const Panier = () => {
 
         {/* Colonne droite : résumé */}
         {cart.length > 0 && (
-          <div className="fixed md:left-2/3 md:bottom-36 bottom-0 left-0 right-0 md:z-auto z-50 w-full lg:w-[30%] max-w-4xl mx-auto lg:mx-0 bg-white rounded-lg p-1 md:p-4 shadow-sm">
+          <div className="md:relative fixed   bottom-0 left-0 right-0 md:z-auto z-50 w-full lg:w-[30%] max-w-4xl mx-auto lg:mx-0 bg-white rounded-lg p-1 md:p-4 shadow-sm">
             <h2 className="hidden lg:flex text-xl font-semibold mb-4">Résumé de la commande</h2>
             <div className="hidden lg:flex justify-between mb-2">
               <span className="font-medium">Total des articles :</span>
@@ -137,9 +168,16 @@ const Panier = () => {
               <span>Total à payer :</span>
               <span className="text-orange-600">{totalAPayer} F</span>
             </div>
-            <button className="mt-1 md:mt-6 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600">
-              Commander maintenant
+            <button onClick={() => handleCommand()} className="mt-1 md:mt-6 w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 flex items-center gap-2 justify-center">
+              <FiCreditCard /> Commander maintenant
             </button>
+            {/* Badge sécurité */}
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg hidden lg:block">
+              <div className="flex items-center text-sm text-gray-600">
+                <FiShield className="w-4 h-4 mr-2 text-green-600" />
+                <span>Paiement 100% sécurisé</span>
+              </div>
+            </div>
           </div>
         )}
       </div>

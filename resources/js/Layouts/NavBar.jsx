@@ -3,14 +3,16 @@ import {
   FiBookOpen, FiUser, FiShoppingCart, FiPhoneCall, FiShield,
   FiBriefcase, FiMapPin, FiBox, FiBarChart, FiMenu,
   FiShoppingBag,
-  FiFilter
+  FiFilter,
+  FiLogOut,
+  FiLogIn
 } from 'react-icons/fi';
 import SideBar2 from './SideBar2';
 import WelcomeSideBar from './welcomeSideBar';
 
 
-const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters = {}, setFilters,activeTab,setActiveTab }) => {
-  const [isConnected, setIsConnected] = useState(false);
+const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters = {}, setFilters, activeTab, setActiveTab, auth }) => {
+  <div className="font-semibold">{auth?.user?.name || "Utilisateur"}</div>
   const [showCart, setShowCart] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showRubanArticles, setShowRubanArticles] = useState(false);
@@ -25,6 +27,19 @@ const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters 
   });
 
   const number = cart.length
+  const lienProfil=()=>{
+    if(auth.user.role=="vendeur"){
+      return '/seller/dashboard'
+    }
+    else if(auth.user.role=="client"){
+      return '/buyer/dashboard'
+    }
+    else if(auth.user.role=="admin" || auth.user.role=="super_admin"){
+      return '/admin/dashboard'
+    }
+
+  }
+
 
 
   useEffect(() => {
@@ -56,7 +71,7 @@ const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters 
   const redirigerVers = (lien) => {
     window.location.href = lien
   }
-
+ 
   return (
     <div >
       <div className='md:hidden'>
@@ -94,6 +109,7 @@ const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters 
                 <span className="absolute -top-[0px] right-1 md:bg-orange-500 bg-white text-orange-500 md:text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {number}
                 </span>
+
               )}
             </div>
 
@@ -104,7 +120,8 @@ const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters 
                   <FiShoppingCart className="text-[40px] text-black" />
                   <sup className="text-2xl text-orange-600">{number}</sup>
                 </div>
-                <div className="text-center text-gray-500" >Votre panier est vide</div>
+                {!number>0 &&
+                <div className="text-center text-gray-500" >Votre panier est vide</div>}
                 <div className="p-2 rounded-[15px] text-center bg-orange-600 text-white cursor-pointer" onClick={() => redirigerVers("/panier")}>Voir le panier</div>
               </div>
             )}
@@ -120,26 +137,30 @@ const NavBar = ({ showFilter, setShowFilter, searchTerm, setSearchTerm, filters 
               <FiUser className="text-2xl text-gray-600 hover:text-orange-500 cursor-pointer" />
             </div>
             {showUserMenu && (
-              isConnected ? (
-                <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg z-10 p-4 space-y-3 text-sm text-black">
-                  <div className="font-semibold">Jean Paul</div>
+              auth.isConnected ? (
+                <div className="absolute right-0 -mt-5 w-48 bg-white rounded-md shadow-lg z-10 p-4 space-y-3 text-sm text-black">
+                  <div className="font-semibold">{auth.user?.prenom } {auth.user?.nom}</div>
+                  <span className='text-gray-400 text-xs'>{auth.user?.email}</span>
                   <hr />
-                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer">Profil</div>
-                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer">Mes Commandes</div>
-                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer">Paramètres</div>
-                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer">Déconnexion</div>
+                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer gap-4  items-center flex" onClick={()=> redirigerVers(lienProfil())}><FiUser/> Profil</div>
+                 
+                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer gap-4  items-center flex" onClick={()=> window.location.href='/buyer/order' }><FiBox/>Mes Commandes</div>
+                  {/* <div className="hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={()=> window.location.href='/buyer/dashboard' }>Paramètres</div> */}
+                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer items-center gap-4 flex" onClick={()=> window.location.href='/logout' }><FiLogOut/> Déconnexion</div>
                 </div>) :
                 <div className="absolute right-0 -mt-8 w-48 bg-white rounded-md shadow-lg z-10 p-4 space-y-3 text-sm text-black">
                   <div className="font-semibold">Connexion</div>
-                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={()=>redirigerVers('/connexion')}>Se connecter</div>
-                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={()=>redirigerVers('/inscription')}>S'inscrire</div>
+                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer flex gap-4 " onClick={() => redirigerVers('/connexion')}><FiLogIn/> Se connecter</div>
+                  <div className="hover:bg-gray-100 p-2 rounded cursor-pointer flex gap-4" onClick={() => redirigerVers('/inscription')}><FiLogIn></FiLogIn> S'inscrire</div>
                 </div>
             )}
 
           </div>
-          <div className='hidden md:inline-block'>
-            <button className='px-6 py-2 rounded-md bg-orange-500' onClick={()=>redirigerVers('/inscription')}>S'inscrire</button>
-          </div>
+          {!auth.isConnected && (
+            <div className='hidden md:inline-block'>
+              <button className='px-6 py-2 rounded-md bg-orange-500' onClick={() => redirigerVers('/inscription')}>S'inscrire</button>
+            </div>
+          )}
         </div>
 
         {/* Ruban navigation */}

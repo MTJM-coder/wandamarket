@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\produit;
 use Auth;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use PhpParser\Node\Stmt\Return_;
 
 class produitController extends Controller
@@ -76,6 +77,7 @@ public function update(Request $request, $id)
     $produit->nom = $request->nom;
     $produit->description = $request->description;
     $produit->prix = $request->prix;
+    $produit->categorie_id = $request->categorie;
     $produit->reduction = $request->reduction ?? null;
     $produit->quantite = $request->stock;
     $produit->save();
@@ -93,5 +95,20 @@ public function update(Request $request, $id)
     }
 
     return redirect()->back()->with('success', 'Produit mis à jour avec succès.');
+}
+
+public function DetailProduct($id){
+     $produit=produit::with('boutique.user','avis.user','images')->find($id);
+        if(!$produit){
+            return redirect()->back()->with('error','Produit non trouvé');
+        }
+    $similaires=produit::with('boutique.user','images','categorie')->where('categorie_id',$produit->categorie_id)->where('id','!=',$produit->id)->get();
+
+        
+    return Inertia::render('DetailProduct',[
+        'produit'=>$produit,
+        'similaires'=>$similaires
+       
+    ]);
 }
 }

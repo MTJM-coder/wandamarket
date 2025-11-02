@@ -24,6 +24,7 @@
         "vite-plugin-pwa": "^1.0.2"
     },
     "dependencies": {
+        "date-fns": "^4.1.0",
         "framer-motion": "^12.23.0",
         "lucide-react": "^0.542.0",
         "react-icons": "^5.5.0",

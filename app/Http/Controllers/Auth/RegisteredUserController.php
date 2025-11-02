@@ -60,12 +60,24 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return 
-          
+        if($user->role=='seller'){
+            return redirect('/seller/dashboard')->with('success','Inscription réussie');
+        }
+        elseif($user->role=='admin'){
+            return redirect('/admin/dashboard')->with('success','Inscription réussie');
+        }
+        elseif($user->role=='assistant'){
+            return redirect('/seller')->with('success','Inscription réussie');
+        }
+        return redirect('/');
+        
 
-        redirect(route('ProductsPage', absolute: false));
-
-
+    }
+    public function logout(){
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+       return redirect('/');
     }
     
 

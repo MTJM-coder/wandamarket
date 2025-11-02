@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class produit extends Model
+class Produit extends Model
 {
     protected $fillable = [
         'nom',
@@ -20,37 +20,73 @@ class produit extends Model
         'slug',
     ];
 
-    protected $casts=[
-        'reduction' => 'decimal:2',
-        'prix_reduit'=>'decimal:2',
+    protected $casts = [
+        'reduction'    => 'decimal:2',
+        'prix_reduit'  => 'decimal:2',
     ];
 
-    public function TronquerA2Chiffres(){
-        return number_format($this->reduction, 2);
+    /**
+     * Tronquer la réduction à 2 chiffres après la virgule
+     */
+    public function tronquerA2Chiffres()
+    {
+        return number_format($this->reduction, 2, '.', '');
     }
-    
-    public function convertirPrixEnEntier(){
-        return ceil($this->prix_reduit, 0);
+
+    /**
+     * Convertir le prix réduit en entier (arrondi supérieur)
+     */
+    public function convertirPrixEnEntier()
+    {
+        return ceil($this->prix_reduit);
     }
-    public function avis(){
+
+    /**
+     * Relation avec les avis
+     */
+    public function avis()
+    {
         return $this->hasMany(AvisProduit::class);
     }
-    public function boutique(){
+
+    /**
+     * Relation avec la boutique
+     */
+    public function boutique()
+    {
         return $this->belongsTo(Boutique::class);
     }
 
-    public function categories(){
-        return $this->belongsTo(Categorie::class);
+    /**
+     * Relation avec la catégorie
+     */
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class, 'categorie_id');
     }
-    public function images() {
-    return $this->hasMany(Image::class);
-}
-    public function favoris(){
-        return $this->hasMany(favoris::class);
+
+    /**
+     * Relation avec les images
+     */
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
-   public function commandes()
-{
-    return $this->belongsToMany(Commande::class, 'commande_produits')
-                ->withPivot('quantite', 'prix_unitaire'); 
-}
+
+    /**
+     * Relation avec les favoris
+     */
+    public function favoris()
+    {
+        return $this->hasMany(Favoris::class);
+    }
+
+    /**
+     * Relation avec les commandes (table pivot commande_produits)
+     */
+    public function commandes()
+    {
+        return $this->belongsToMany(Commande::class, 'commande_produits')
+                    ->withPivot('quantite', 'prix_unitaire');
+    }
 }

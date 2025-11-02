@@ -1,14 +1,60 @@
 import React, { useState } from 'react'
 import AdminNavBar from '@/Layouts/AdminNavBar'
 import { FiUser, FiLock, FiBell, FiDollarSign, FiSettings } from 'react-icons/fi'
+import { router, usePage } from '@inertiajs/react'
+import ConfirmPassword from './Auth/ConfirmPassword'
+import AlertMessage from '@/Layouts/AlertMessage'
 
 const AdminParametre = () => {
   const [active, setActive] = useState("settings")
   const [onglet, setOnglet] = useState("profil")
 
+  const { admin } = usePage().props
+  const {errors}=usePage().props
+  const {flash}=usePage().props
+
+  const [formData, setFormData] = useState({
+    nom: admin.nom || '',
+    email: admin.email || '',
+    telephone: admin.telephone || '',
+  })
+
+  const [formSecureData,setFormSecureData]=useState({
+    passwordActuel:'',
+    newPassword_confirmation:'',
+    newPassword:''
+  })
+
+  // Mise à jour des champs
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+  const handleSecureChange = (e) => {
+  const { name, value } = e.target;
+  setFormSecureData({
+    ...formSecureData,
+    [name]: value,
+  });
+};
+
+  // Soumission du formulaire
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    router.post('/admin/update', formData)
+  }
+  const handleSecuritySubmit=(e)=>{
+    e.preventDefault()
+    router.post('/admin/update/secure',formSecureData)
+  }
+
+
   return (
     <div>
       <AdminNavBar active={active} setActive={setActive} />
+      <AlertMessage message={flash.success} type="success" />
       <div className="p-6 bg-white rounded-lg shadow-md md:ml-60">
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 bg-gradient-to-r from-yellow-900 via-yellow-500 to-yellow-200 bg-clip-text text-transparent">
           <FiSettings className="text-yellow-600" /> Paramètres
@@ -47,11 +93,34 @@ const AdminParametre = () => {
           {onglet === "profil" && (
             <div>
               <h3 className="text-lg font-bold mb-3">Modifier votre profil</h3>
-              <form className="grid gap-4 max-w-lg">
-                <input type="text" placeholder="Nom complet" className="border p-2 rounded w-full" />
-                <input type="email" placeholder="Email" className="border p-2 rounded w-full" />
-                <input type="text" placeholder="Téléphone" className="border p-2 rounded w-full" />
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">Enregistrer</button>
+              <form className="grid gap-4 max-w-lg" onSubmit={handleSubmit}>
+                <input 
+                  type="text" 
+                  name="nom" 
+                  value={formData.nom} 
+                  onChange={handleChange} 
+                  className="border p-2 rounded w-full" 
+                  placeholder="Nom complet"
+                />
+                <input 
+                  type="email" 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleChange} 
+                  className="border p-2 rounded w-full" 
+                  placeholder="Adresse email"
+                />
+                <input 
+                  type="text" 
+                  name="telephone" 
+                  value={formData.telephone} 
+                  onChange={handleChange} 
+                  className="border p-2 rounded w-full" 
+                  placeholder="Téléphone"
+                />
+                <button type='submit' className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">
+                  Enregistrer
+                </button>
               </form>
             </div>
           )}
@@ -59,10 +128,13 @@ const AdminParametre = () => {
           {onglet === "securite" && (
             <div>
               <h3 className="text-lg font-bold mb-3">Sécurité du compte</h3>
-              <form className="grid gap-4 max-w-lg">
-                <input type="password" placeholder="Mot de passe actuel" className="border p-2 rounded w-full" />
-                <input type="password" placeholder="Nouveau mot de passe" className="border p-2 rounded w-full" />
-                <input type="password" placeholder="Confirmer le mot de passe" className="border p-2 rounded w-full" />
+              <form className="grid gap-4 max-w-lg" onSubmit={handleSecuritySubmit}  >
+                <input type="password" name='passwordActuel' onChange={handleSecureChange} value={formSecureData.passwordActuel} placeholder="Mot de passe actuel" className="border p-2 rounded w-full" />
+                <input type="password" name='newPassword' onChange={handleSecureChange} value={formSecureData.newPassword} placeholder="Nouveau mot de passe" className="border p-2 rounded w-full" />
+              <input type="password"  name='newPassword_confirmation' onChange={handleSecureChange} value={formSecureData.newPassword_confirmation} placeholder="Confirmer le mot de passe" className="border p-2 rounded w-full" />
+              {errors.newPassword && (
+  <p className="text-red-500 text-sm">{errors.newPassword}</p>
+)}
                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">Modifier</button>
               </form>
             </div>

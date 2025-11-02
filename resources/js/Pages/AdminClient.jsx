@@ -1,18 +1,36 @@
 import AdminNavBar from '@/Layouts/AdminNavBar'
 import React, { useState } from 'react'
 import { Card } from '@/Components/ui/Card'
-import { Head, useForm } from "@inertiajs/react";
+import { Head, router, useForm, usePage } from "@inertiajs/react";
 import { FiDelete, FiEdit, FiEye, FiUserCheck, FiUserX, FiMapPin, FiShoppingBag, FiUser, FiChevronLeft, FiUsers, FiSearch, FiMail, FiCalendar, FiSettings, FiBox, FiPhone, FiMap, FiTrash2, FiShieldOff, FiShield } from 'react-icons/fi';
-
+import { useMemo } from 'react';
+import AlertMessage from '@/Layouts/AlertMessage';
 const AdminClient = () => {
-    const clients=[
-        { id: 1, nom: "Jean Dupont", email: "jean@example.com", telephone: "+237 698 45 32 10",ville:"Douala", quartier:"dakar", commandes: 12 ,created_at:"20/03/2025",updatet_at:"13/04/2025",etat:"actif"},
-        { id: 2, nom: "Marie Claire", email: "marie@example.com", telephone: "+237 677 12 45 98",ville:"Douala", quartier:"dakar", commandes: 5,created_at:"10/04/2025",updatet_at:"13/04/2025",etat:"inactif" },
-        { id: 3, nom: "Paul Messi", email: "paul@example.com", telephone: "+237 690 88 74 12",ville:"Douala", quartier:"dakar", commandes: 20,created_at:"02/04/2025",updatet_at:"13/04/2025",etat:"actif" },
-   ];
-    const handleBlock = () => {
+    const [searchTerm, setSearchTerm] = useState('')
+    const { props } = usePage()
+    const flash = props
+    const clients = props.clients
+    const filteredClients = useMemo(() => {
+        return clients.filter(cl => {
+            const matchesSearch = cl.nom.toString().includes(searchTerm)
+            return matchesSearch
+        })
+    }, [clients, searchTerm])
+
+
+    const handleBlock = (id) => {
         if (confirm("Voulez-vouz bloquer ce compte?")) {
-            alert("compte bloqué")
+            router.get(`/admin/block/user/${id}`)
+        }
+    }
+    const handleDisBlock = (id) => {
+        if (confirm("Voulez-vouz débloquer ce compte?")) {
+            router.get(`/admin/disblock/user/${id}`)
+        }
+    }
+    const supprimer = (id) => {
+        if (confirm("Voulez-vouz supprimer ce compte?")) {
+            router.delete(`/admin/remove/user/${id}`)
         }
     }
     const COMMANDES = [
@@ -45,10 +63,12 @@ const AdminClient = () => {
     ];
     const [active, setActive] = useState("clients")
     const [activebtn, setActivebtn] = useState(null)
-    const clientsInactifs=clients.filter(client=>client.etat=="inactif").length
+    const clientsInactifs = clients.filter(client => client.statut == "inactif").length
     return (
         <div>
             <AdminNavBar active="clients" setActive={setActive} />
+            <AlertMessage message={flash.success} type="success" />
+            <AlertMessage message={flash.error} type="error" />
             {!activebtn && (
                 <div className="p-6 bg-white rounded-lg shadow-md md:ml-60">
                     <div className='mb-6 mt-11 md:mt-0'>
@@ -60,13 +80,15 @@ const AdminClient = () => {
                                     type="search"
                                     placeholder="Rechercher un client par nom ou email"
                                     className="h-8 px-3 text-xs bg-white rounded-md border-none "
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                 />
 
                             </div>
                             <button className='bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-200 text-white px-2 rounded-md md:mt-2 text-sm py-1'>Valider</button>
                         </div>
                     </div>
-                    <div className='flex mb-6 gap-5'>
+                    <div className='grid grid-cols-1 md:grid-cols-3 mb-6 gap-5'>
                         <div className='bg-white flex items-center gap-5 shadow-md p-5 rounded'>
                             <div className='bg-green-700 p-3 rounded text-white'><FiUsers /></div>
                             <div className='flex flex-col'>
@@ -106,7 +128,7 @@ const AdminClient = () => {
                                     <th className="tracking-wider px-2 py-4 text-left items-center">
                                         <FiMail className="inline mr-2 text-green-300" />Contact infos
                                     </th>
-                                     <th className="tracking-wider px-2 py-4 text-left items-center">
+                                    <th className="tracking-wider px-2 py-4 text-left items-center">
                                         <FiShield className="inline mr-2 text-green-300" />Statut
                                     </th>
                                     <th className="tracking-wider px-2 py-4 text-left  items-center">
@@ -118,46 +140,46 @@ const AdminClient = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                               {clients.map((client)=>
-                                 <tr>
-                                    <td className="px-2 py-4 text-left">
-                                        <p className="font-bold md:text-xl ">{client.nom}</p>
-                                        <p className="text-xs p-2 border w-max m-2 rounded bg-gray-100">ID:{client.id}</p>
-                                    </td>
-                                    <td className="text-xs text-gray-600 space-y-2 font-semibold px-2 py-4 text-left">
-                                        <p>
-                                            <FiMail className="inline" /> <span>{client.email}</span>
-                                        </p>
-                                        <p>
-                                            <FiPhone className="inline" /> <span>{client.telephone}</span>
-                                        </p>
-                                        <p>
-                                            <FiMapPin className="inline" /> <span>{client.ville}, {client.quartier}</span>
-                                        </p>
-                                    </td>
-                                    <td className="space-y-1 px-2 py-4 text-left">
-                                       <p className={`text-sm px-5  rounded w-max ${client.etat=="inactif"?"bg-red-200 text-red-700":"bg-green-300 text-green-700"} `}>{client.etat}</p>
-                                    </td>
-                                    <td className="space-y-1 px-2 py-4 text-left">
-                                        <p className="text-xs">
-                                            <span className="font-bold">Inscris: </span><span>{client.created_at}</span>
-                                        </p>
-                                        <p className="text-xs">
-                                            <span className="font-bold">Modifié: </span><span>{client.updatet_at}</span>
-                                        </p>
-                                    </td>
-                                    <td className="px-2 py-4 text-left">
-                                        <div className="flex gap-3 md:gap-5">
-                                            {client.etat=="actif" ? (
-                                            <FiShieldOff className="hover:text-orange-500 cursor-pointer" />
-                                            ):
-                                            <FiShield className="hover:text-orange-500 cursor-pointer"/>
-                                            }
-                                            <FiTrash2 className="hover:text-red-500 cursor-pointer" />
-                                            
-                                        </div>
-                                    </td>
-                                </tr>
+                                {filteredClients.map((client) =>
+                                    <tr>
+                                        <td className="px-2 py-4 text-left">
+                                            <p className="font-bold md:text-xl ">{client.nom}</p>
+                                            <p className="text-xs p-2 border w-max m-2 rounded bg-gray-100">ID:{client.id}</p>
+                                        </td>
+                                        <td className="text-xs text-gray-600 space-y-2 font-semibold px-2 py-4 text-left">
+                                            <p>
+                                                <FiMail className="inline" /> <span>{client.email}</span>
+                                            </p>
+                                            <p>
+                                                <FiPhone className="inline" /> <span>{client.telephone}</span>
+                                            </p>
+                                            <p>
+                                                <FiMapPin className="inline" /> <span>{client.ville}, {client.quartier}</span>
+                                            </p>
+                                        </td>
+                                        <td className="space-y-1 px-2 py-4 text-left">
+                                            <p className={`text-sm px-5  rounded w-max ${client.statut == "inactif" ? "bg-red-200 text-red-700" : "bg-green-300 text-green-700"} `}>{client.statut}</p>
+                                        </td>
+                                        <td className="space-y-1 px-2 py-4 text-left">
+                                            <p className="text-xs">
+                                                <span className="font-bold">Inscris: </span><span>{new Date(client.created_at).toLocaleDateString('fr-FR')}</span>
+                                            </p>
+                                            <p className="text-xs">
+                                                <span className="font-bold">Modifié: </span><span>{new Date(client.updated_at).toLocaleDateString('fr-FR')}</span>
+                                            </p>
+                                        </td>
+                                        <td className="px-2 py-4 text-left">
+                                            <div className="flex gap-3 md:gap-5">
+                                                {client.statut == "inactif" ? (
+                                                    <FiShieldOff className="hover:text-orange-500 cursor-pointer" onClick={()=>handleDisBlock(client.id)} />
+                                                ) :
+                                                    <FiShield className="hover:text-orange-500 cursor-pointer" onClick={()=>handleBlock(client.id)} />
+                                                }
+                                                <FiTrash2 className="hover:text-red-500 cursor-pointer" onClick={()=>supprimer(client.id)} />
+
+                                            </div>
+                                        </td>
+                                    </tr>
                                 )}
                             </tbody>
                         </table>
@@ -226,5 +248,6 @@ const AdminClient = () => {
         </div>
     )
 }
+
 
 export default AdminClient

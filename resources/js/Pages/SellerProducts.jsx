@@ -56,9 +56,9 @@ const SellerProducts = ({ categorie }) => {
            {activeTab =='produits' && (
             <div>
                 <SellerSideBar activeTab={activeTab} setActiveTab={setActiveTab} />
-             <div className="md:p-6 md:ml-24">
+             <div className="md:p-6 md:ml-72">
                 
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 mt-24">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4 md:mt-24">
                     {/* <h2 className="text-xl font-bold text-[#071726]">Mes produits ({produit.length})</h2> */}
                     <div className="flex items-center gap-3 w-full md:w-auto">
                         <div className="relative flex-1 md:w-64">
@@ -165,30 +165,55 @@ const SellerProducts = ({ categorie }) => {
                     </table>
                 </div>
                 {/* mobile */}
-                <div className='p-4 grid grid-cols-2 bg-gray-100 md:hidden'>
-                    {produit.map((produit) => (
-                        <div key={produit.id} className='bg-white p-2 rounded-lg shadow-xs h-max w-max my-2 mx-1'>
-                            <div className='p-5 mb-1 text-center bg-cover bg-center h-28'>
-                                <img src={`/storage/${produit.images[0].url}`} alt="" className='rounded w-[100%] h-[100%] object-cover ' />
-                            </div>
-                            <div className=''>
-                                <p className='text-center mb-2'>{produit.nom}</p>
-                                <p className='flex justify-between items-center space-x-5'>
-                                    <p className={`text-xs p-1 bg-green-100 rounded-sm text-green-500' ${produit.disponible === 1 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                                        }`}>
-                                        {produit.disponible === 1 ? 'Disponible' : 'Indisponible'}</p>
-                                    <p className='text-xs text-gray-400'>en stock:{produit.quantite}</p>
+              <div className="p-4 grid grid-cols-2 gap-4 bg-gray-100 md:hidden">
+  {produit.map((produit) => (
+    <div
+      key={produit.id}
+      className="bg-white p-3 rounded-lg shadow-sm flex flex-col items-center"
+    >
+      {/* Image produit */}
+      <div className="w-full h-28 mb-3">
+        <img
+          src={`/storage/${produit.images[0].url}`}
+          alt={produit.nom}
+          className="rounded-lg w-full h-full object-cover"
+        />
+      </div>
 
-                                </p>
-                                <div className='flex justify-between my-2'>
-                                    <FiTrash2 className='inline m-2 text-red-700' />
-                                    <FiEdit className='inline m-2 text-orange-500' />
-                                </div>
-                            </div>
+      {/* Nom produit */}
+      <p className="text-center text-sm font-medium text-gray-700 mb-2 truncate w-full">
+        {produit.nom}
+      </p>
 
-                        </div>
-                    ))}
-                </div>
+      {/* Disponibilité & Stock */}
+      <div className="flex justify-between items-center w-full mb-3">
+        <span
+          className={`text-xs px-2 py-1 rounded-full font-medium ${
+            produit.disponible === 1
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-500"
+          }`}
+        >
+          {produit.disponible === 1 ? "Disponible" : "Indisponible"}
+        </span>
+        <span className="text-xs text-gray-500">
+          Stock : {produit.quantite}
+        </span>
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-between w-full">
+        <button onClick={() => handleDeleteProduct(produit.id)} className="flex-1 flex justify-center py-2 text-red-600 hover:text-red-800 transition">
+          <FiTrash2 className="text-lg" />
+        </button>
+        <button onClick={() => { setSelectedProduct(produit); setActiveTab('ajouter'); }} className="flex-1 flex justify-center py-2 text-orange-500 hover:text-orange-700 transition">
+          <FiEdit className="text-lg" />
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
 
               
             </div>
@@ -225,18 +250,15 @@ const SellerProducts = ({ categorie }) => {
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie *</label>
                                 <select
                                     name="categorie"
-                                    defaultValue={selectedProduct?.categorie || ''}
+                                    defaultValue={selectedProduct?.categorie?.nom || ''}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                                     required
                                 >
                                     <option value="">Sélectionnez une catégorie</option>
-                                    {/* <option value="Vêtements">Vêtements</option>
-                                          <option value="Accessoires">Accessoires</option>
-                                          <option value="Chaussures">Chaussures</option>
-                                          <option value="Artisanat">Artisanat</option> */}
-                                    {/* {categorie.map((categorie) => (
+                                   
+                                    {categorie.map((categorie) => (
                                         <option value={categorie.id}>{categorie.nom}</option>
-                                      ))} */}
+                                      ))}
                                 </select>
                             </div>
 
@@ -261,7 +283,7 @@ const SellerProducts = ({ categorie }) => {
                                 <input
                                     type="number"
                                     name="reduction"
-                                    defaultValue={selectedProduct?.reduction || '0'}
+                                    defaultValue={selectedProduct?.reduction || ''}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                                     placeholder="0"
                                     min="0"
@@ -275,7 +297,7 @@ const SellerProducts = ({ categorie }) => {
                                 <input
                                     type="number"
                                     name="stock"
-                                    defaultValue={selectedProduct?.stock || '0'}
+                                    defaultValue={selectedProduct?.quantite || ''}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ec8d0c] focus:border-transparent"
                                     placeholder="Quantité disponible"
                                     min="0"
@@ -327,7 +349,7 @@ const SellerProducts = ({ categorie }) => {
                                         <div className="flex flex-wrap gap-2 mt-4">
                                             {selectedProduct.images.map((img, index) => (
                                                 <div key={index} className="relative w-20 h-20 border rounded-md overflow-hidden">
-                                                    <img src={img} alt={`Produit ${index}`} className="w-full h-full object-cover" />
+                                                    <img src={`/storage/${img.url}`} alt={`Produit ${index}`} className="w-full h-full object-cover" />
                                                     <button
                                                         type="button"
                                                         className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"

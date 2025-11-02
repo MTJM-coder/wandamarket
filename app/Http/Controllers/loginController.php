@@ -7,6 +7,7 @@ use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class loginController extends Controller
 {
@@ -34,8 +35,19 @@ class loginController extends Controller
         } else {
             Auth::login($user);
         }
-
-        return redirect('/buyer/dashboard')->with('status', 'Connexion réussie.');
+        
+        if ($user->role->value=="vendeur"){
+            
+            return redirect()->route('seller.dashboard')->with([
+                'isConnected' => true,
+                'user' => $user
+            ]);
+        }
+// dd(Auth::check());
+        return redirect()->route('welcome')->with([
+        'isConnected' => true,
+        'user' => $user
+    ]);
     }
 
     // reset password step 1
@@ -105,10 +117,10 @@ class loginController extends Controller
 
         // Mettre à jour le mot de passe
         $user->password = Hash::make($req->password);
-        $user->reset_code = null; // Réinitialiser le code de réinitialisation
+        $user->reset_code = null; 
         $user->save();
 
-        session()->forget('reset_email'); // Effacer l'état
+        session()->forget('reset_email'); 
 
         return redirect('/connexion')->with('status', 'Votre mot de passe a été réinitialisé avec succès.');
     }
