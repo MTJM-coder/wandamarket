@@ -24,6 +24,15 @@ const Messagerie = () => {
         return () => window.removeEventListener("click", handleClickOutside);
     }, []);
 
+    const unRead = conversations.reduce(
+        (sum, conv) =>
+            sum +
+            conv.message.filter(
+                msg => msg.lu == false && msg.destinataire_id === auth.user.id
+            ).length,
+        0
+    );
+    ;
 
 
 
@@ -31,9 +40,8 @@ const Messagerie = () => {
         const chatBox = document.querySelector('#chat-box');
         if (!chatBox) return;
 
-        const currentConversation = conversations.find(
-            m => m.user1?.id === selectedId || m.user2?.id === selectedId
-        );
+        const currentConversation = conversations.find(m => m?.id === selectedId)
+
         if (!currentConversation) return;
 
         const messageCount = currentConversation.message?.length || 0;
@@ -42,7 +50,6 @@ const Messagerie = () => {
         if (messageCount > lastMessageCount || messageCount === 1) {
             chatBox.scrollTop = chatBox.scrollHeight;
         }
-
         setLastMessageCount(messageCount);
     }, [conversations, selectedId]);
 
@@ -114,9 +121,8 @@ const Messagerie = () => {
     const NEW = () => setNewDiscussion(true);
     const NEW2 = () => setNewDiscussion(false);
 
-    const discuss = conversations.find(m =>
-        m.user1?.id === selectedId || m.user2?.id === selectedId
-    );
+    const discuss = conversations.find(m => m?.id === selectedId)
+
 
     const destinataire = (discuss?.user1_id == auth?.user?.id) ? discuss?.user2_id : discuss?.user1_id
     // alert(destinataire)
@@ -185,9 +191,9 @@ const Messagerie = () => {
             {showContenuMessage !== 'show' &&
                 <div className="md:hidden">
                     {auth?.user?.role == 'vendeur' ?
-                        <SellerSideBar activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <SellerSideBar unRead={unRead} activeTab={activeTab} setActiveTab={setActiveTab} />
                         :
-                        <SideBar2 activeTab={activeTab} setActiveTab={setActiveTab}></SideBar2>
+                        <SideBar2 unRead={unRead} activeTab={activeTab} setActiveTab={setActiveTab}></SideBar2>
                     }
                 </div>
             }
@@ -268,23 +274,41 @@ const Messagerie = () => {
                                                     <span className="absolute  w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center font-semibold">{msg.message.filter(m => m.lu == false && m.destinataire_id == auth?.user?.id).length}</span>
                                                 </div>
                                             }
-                                            <div className="rounded-full w-12 bg-gray-50">
-
-                                                <FiUser className="m-3 mx-auto size-6" />
+                                            <div className="rounded-full w-12 h-12 bg-gray-100 flex items-center justify-center overflow-hidden border">
+                                                {msg.user1.id === auth?.user?.id ? (
+                                                    msg.user2?.image ? (
+                                                        <img
+                                                            src={`/storage/${msg.user2.image}`}
+                                                            alt="User"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <FiUser className="size-6" />
+                                                    )
+                                                ) : msg.user1?.image ? (
+                                                    <img
+                                                        src={`/storage/${msg.user1.image}`}
+                                                        alt="User"
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <FiUser className="size-6" />
+                                                )}
                                             </div>
+
                                             <div className={`ml-1 w-full ${msg.message[msg?.message?.length - 1]?.lu == false && msg.message[msg?.message?.length - 1]?.destinataire_id == auth?.user?.id ? 'font-bold' : ''}`}>
                                                 <div className=" w-fit ml-2 items-start">{msg?.user1?.id == auth?.user?.id ? (msg?.user2?.nom + " " + msg?.user2?.prenom) : (msg?.user1?.nom + " " + msg?.user1?.prenom)}</div>
                                                 <div className="ml-2 items-start w-fit truncate">
-                                                    {msg?.message[msg?.message?.length - 1]?.type=='produit'?'[ ] carte':
-                                                    msg?.message[msg?.message?.length - 1]?.contenu
-                                                        ? msg.message[msg.message.length - 1].contenu
-                                                        : msg?.message[msg?.message?.length - 1]?.piece_jointe
-                                                            ? (
-                                                                <>
-                                                                    <FiImage className=" inline mr-2" />
-                                                                    <span>Image</span>
-                                                                </>)
-                                                            : ''}
+                                                    {msg?.message[msg?.message?.length - 1]?.type == 'produit' ? '[ ] carte' :
+                                                        msg?.message[msg?.message?.length - 1]?.contenu
+                                                            ? msg.message[msg.message.length - 1].contenu
+                                                            : msg?.message[msg?.message?.length - 1]?.piece_jointe
+                                                                ? (
+                                                                    <>
+                                                                        <FiImage className=" inline mr-2" />
+                                                                        <span>Image</span>
+                                                                    </>)
+                                                                : ''}
                                                 </div>
 
                                             </div>
@@ -347,7 +371,8 @@ const Messagerie = () => {
                                 >
 
                                     {conversations
-                                        .find(m => m?.user2?.id === selectedId || m?.user1?.id === selectedId)
+                                        .find(m => m?.id === selectedId)
+
                                         ?.message
                                         ?.map((msg) => {
                                             // --- Si message de type "produit"
@@ -471,7 +496,8 @@ const Messagerie = () => {
 
                                             {/* Supprimer pour tous : visible seulement si je suis l'expéditeur */}
                                             {conversations
-                                                .find(m => m?.user2?.id === selectedId || m?.user1?.id === selectedId)
+                                                .find(m => m?.id === selectedId)
+
                                                 ?.message
                                                 ?.find(msg => msg.id === contextMenu.msgId)?.expediteur_id === auth?.user?.id && (
                                                     <>

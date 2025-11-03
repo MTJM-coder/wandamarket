@@ -19,7 +19,7 @@ import {
     FiLogOut
 } from 'react-icons/fi';
 
-const SideBar2 = ({ activeTab, setActiveTab }) => {
+const SideBar2 = ({ activeTab, setActiveTab,unRead }) => {
      const { props } = usePage()
     const auth = props.auth
     const [hoveredItem, setHoveredItem] = useState(null);
@@ -52,7 +52,7 @@ const SideBar2 = ({ activeTab, setActiveTab }) => {
             route: '/messagerie',
             color: 'purple',
             description: 'Conversations avec les vendeurs',
-            // badge: 3
+            badge: unRead
         },
         {
             id: 4,

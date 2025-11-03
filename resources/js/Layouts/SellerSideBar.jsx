@@ -16,7 +16,7 @@ import {
 import { FaStore } from 'react-icons/fa';
 
 
-const SellerSideBar = ({ activeTab, setActiveTab }) => {
+const SellerSideBar = ({ activeTab, setActiveTab,unRead }) => {
   const {props}=usePage();
   const auth=props.auth;
   const [notifications, setNotifications] = useState({
@@ -24,6 +24,7 @@ const SellerSideBar = ({ activeTab, setActiveTab }) => {
     // orders: 8,
     // products: 2
   });
+
 
   const menuItems = [
     { 
@@ -67,7 +68,7 @@ const SellerSideBar = ({ activeTab, setActiveTab }) => {
       color: 'text-purple-500',
       bgColor: 'bg-purple-50',
       hoverColor: 'hover:bg-purple-50',
-      badge: notifications.messages
+      badge: unRead
     },
     { 
       id: 6, 

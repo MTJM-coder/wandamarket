@@ -21,7 +21,9 @@ class messageController extends Controller
         $conversations = Conversation::where('user1_id', $user->id)
             ->orWhere('user2_id', $user->id)
             ->orderBy('updated_at', 'desc')
-            ->with('user1', 'user2', 'message')
+            ->with(['user1', 'user2', 'message' => function ($q) {
+                $q->orderBy('created_at', 'asc');
+            }])
             ->get();
 
         return Inertia::render('Messagerie', [
