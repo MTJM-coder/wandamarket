@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d9488">
+
 
 <head>
     <meta charset="utf-8">
